@@ -21,6 +21,10 @@ private:
 private slots:
     void clear_clicked();
     void ok_clicked();
+
+signals:
+    void login_successful();
+
 };
 
 #endif // LOGINPAGE_H

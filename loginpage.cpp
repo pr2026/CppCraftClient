@@ -36,11 +36,10 @@ void LoginPage::ok_clicked()
     QString login = ui->login_line->text();
     QString password = ui->password_line->text();
 
-    qInfo() << "Заходим с логином" << login;
-
     if (login == "" || password == "") {
         QMessageBox::warning(this, "Ошибка", "Неверный логин или пароль");
     } else {
+        emit login_successful();
         QMessageBox::information(this, "Ура", "Вы зарегистрировались!");
         hide();
     }

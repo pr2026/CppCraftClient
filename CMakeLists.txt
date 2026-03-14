@@ -12,6 +12,8 @@ qt_add_executable(CppCraft_front
     mainwindow.h
     mainwindow.ui
     loginpage.h loginpage.cpp loginpage.ui
+    taskpage.h taskpage.cpp taskpage.ui
+    task.h
 
 )
 

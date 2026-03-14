@@ -8,9 +8,18 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     loginPage = new LoginPage(this);
+    taskPage = new TaskPage(this);
 
     ui->stackedWidget->addWidget(loginPage);
-    ui->stackedWidget->setCurrentWidget(loginPage);
+    ui->stackedWidget->addWidget(taskPage);
+
+    // для отладки taskPage!! потом поменять на loginPage!!
+    ui->stackedWidget->setCurrentWidget(taskPage);
+    // ui->stackedWidget->setCurrentWidget(loginPage);
+
+    connect(loginPage, &LoginPage::login_successful, this, [=]() {
+        ui->stackedWidget->setCurrentWidget(taskPage);
+    });
 }
 
 MainWindow::~MainWindow()

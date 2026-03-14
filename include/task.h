@@ -9,4 +9,4 @@ struct Task {
     QString description;
 };
 
-#endif // TASK_H
+#endif  // TASK_H

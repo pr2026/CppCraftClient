@@ -2,10 +2,10 @@
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
-{
+    : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
+
+    showMaximized();
 
     loginPage = new LoginPage(this);
     taskPage = new TaskPage(this);
@@ -17,12 +17,11 @@ MainWindow::MainWindow(QWidget *parent)
     ui->stackedWidget->setCurrentWidget(taskPage);
     // ui->stackedWidget->setCurrentWidget(loginPage);
 
-    connect(loginPage, &LoginPage::login_successful, this, [=]() {
+    connect(loginPage, &LoginPage::loginSuccessful, this, [=]() {
         ui->stackedWidget->setCurrentWidget(taskPage);
     });
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
     delete ui;
 }

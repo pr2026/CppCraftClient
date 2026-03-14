@@ -1,16 +1,15 @@
 #ifndef TASKPAGE_H
 #define TASKPAGE_H
 
-#include <QWidget>
 #include <QVector>
+#include <QWidget>
 #include "task.h"
 
 namespace Ui {
 class TaskPage;
 }
 
-class TaskPage : public QWidget
-{
+class TaskPage : public QWidget {
     Q_OBJECT
 
 public:
@@ -19,12 +18,13 @@ public:
 
 private:
     Ui::TaskPage *ui;
-    QVector<Task> tasks_list;
-    void load_tasks();
+    QVector<Task> tasksList;
+    void loadTasks();
 
 private slots:
-    void show_task(int index);
-    void clear_clicked();
+    void showTask(int index);
+    void clearClicked();
+    void submitClicked();
 };
 
-#endif // TASKPAGE_H
+#endif  // TASKPAGE_H

@@ -1,45 +1,41 @@
 #include "loginpage.h"
-#include "ui_loginpage.h"
 #include <QDebug>
 #include <QMessageBox>
+#include "ui_loginpage.h"
 
-LoginPage::LoginPage(QWidget *parent)
-    : QWidget(parent)
-    , ui(new Ui::LoginPage)
-{
+LoginPage::LoginPage(QWidget *parent) : QWidget(parent), ui(new Ui::LoginPage) {
     ui->setupUi(this);
-    connect(ui->clear_button, &QPushButton::clicked, this, &LoginPage::clear_clicked);
-    connect(ui->ok_button, &QPushButton::clicked, this, &LoginPage::ok_clicked);
+    connect(
+        ui->clearButton, &QPushButton::clicked, this, &LoginPage::clearClicked
+    );
+    connect(ui->okButton, &QPushButton::clicked, this, &LoginPage::okClicked);
 
-    ui->login_line->setStyleSheet("background-color: white;");
-    ui->password_line->setStyleSheet("background-color: white;");
+    ui->loginInput->setStyleSheet("background-color: white;");
+    ui->passwordInput->setStyleSheet("background-color: white;");
 
     ui->verticalWidget->setStyleSheet(
         "background-color: rgb(248, 199, 199);"
         "border-radius: 5px;"
-        );
+    );
 }
 
-LoginPage::~LoginPage()
-{
+LoginPage::~LoginPage() {
     delete ui;
 }
 
-void LoginPage::clear_clicked()
-{
-    ui->login_line->clear();
-    ui->password_line->clear();
+void LoginPage::clearClicked() {
+    ui->loginInput->clear();
+    ui->passwordInput->clear();
 }
 
-void LoginPage::ok_clicked()
-{
-    QString login = ui->login_line->text();
-    QString password = ui->password_line->text();
+void LoginPage::okClicked() {
+    QString login = ui->loginInput->text();
+    QString password = ui->passwordInput->text();
 
     if (login == "" || password == "") {
         QMessageBox::warning(this, "Ошибка", "Неверный логин или пароль");
     } else {
-        emit login_successful();
+        emit loginSuccessful();
         QMessageBox::information(this, "Ура", "Вы зарегистрировались!");
         hide();
     }

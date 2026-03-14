@@ -7,13 +7,12 @@ qt_standard_project_setup()
 
 qt_add_executable(CppCraft_front
     WIN32 MACOSX_BUNDLE
-    main.cpp
-    mainwindow.cpp
-    mainwindow.h
-    mainwindow.ui
-    loginpage.h loginpage.cpp loginpage.ui
-    taskpage.h taskpage.cpp taskpage.ui
-    task.h
+    src/main.cpp
+    src/mainwindow.cpp
+    ui/mainwindow.ui
+    src/loginpage.cpp ui/loginpage.ui
+    src/taskpage.cpp ui/taskpage.ui
+    include/loginpage.h include/mainwindow.h include/task.h include/taskpage.h
 
 )
 

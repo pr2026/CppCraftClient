@@ -29,14 +29,13 @@ void LoginPage::clearClicked() {
 }
 
 void LoginPage::okClicked() {
+    // emit NetworkManager::instance()->loginSuccess();  // for debugging!!
+
     QString login = ui->loginInput->text();
     QString password = ui->passwordInput->text();
 
     if (login == "" || password == "") {
         QMessageBox::warning(this, "Ошибка", "Неверный логин или пароль");
-    } else {
-        emit loginSuccessful();
-        QMessageBox::information(this, "Ура", "Вы зарегистрировались!");
-        hide();
     }
+    NetworkManager::instance()->login(login, password);
 }

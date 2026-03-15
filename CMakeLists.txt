@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.19)
 project(CppCraft_front LANGUAGES CXX)
 
 find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets Network)
 
 qt_standard_project_setup()
 
@@ -21,6 +22,8 @@ qt_add_executable(CppCraft_front
     include/mainwindow.h
     include/task.h
     include/taskpage.h
+    include/networkmanager.h src/networkmanager.cpp
+
 
 )
 
@@ -28,6 +31,7 @@ target_link_libraries(CppCraft_front
     PRIVATE
         Qt::Core
         Qt::Widgets
+        Qt::Network
 )
 
 include(GNUInstallDirs)

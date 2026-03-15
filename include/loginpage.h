@@ -7,8 +7,7 @@ namespace Ui {
 class LoginPage;
 }
 
-class LoginPage : public QWidget
-{
+class LoginPage : public QWidget {
     Q_OBJECT
 
 public:
@@ -19,8 +18,11 @@ private:
     Ui::LoginPage *ui;
 
 private slots:
-    void clear_clicked();
-    void ok_clicked();
+    void clearClicked();
+    void okClicked();
+
+signals:
+    void loginSuccessful();
 };
 
-#endif // LOGINPAGE_H
+#endif  // LOGINPAGE_H

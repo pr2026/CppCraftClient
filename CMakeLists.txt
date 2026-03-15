@@ -5,13 +5,22 @@ find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets)
 
 qt_standard_project_setup()
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_CURRENT_SOURCE_DIR}/ui)
+
 qt_add_executable(CppCraft_front
     WIN32 MACOSX_BUNDLE
-    main.cpp
-    mainwindow.cpp
-    mainwindow.h
-    mainwindow.ui
-    loginpage.h loginpage.cpp loginpage.ui
+    src/main.cpp
+    src/mainwindow.cpp
+    src/loginpage.cpp
+    src/taskpage.cpp
+    ui/mainwindow.ui
+    ui/loginpage.ui
+    ui/taskpage.ui
+    include/loginpage.h
+    include/mainwindow.h
+    include/task.h
+    include/taskpage.h
 
 )
 

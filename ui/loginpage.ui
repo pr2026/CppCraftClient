@@ -36,7 +36,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QLabel" name="login_label">
+       <widget class="QLabel" name="loginLabel">
         <property name="font">
          <font>
           <family>Century Gothic</family>
@@ -49,7 +49,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="login_line">
+       <widget class="QLineEdit" name="loginInput">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -68,7 +68,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="password_label">
+       <widget class="QLabel" name="passwordLabel">
         <property name="enabled">
          <bool>true</bool>
         </property>
@@ -84,7 +84,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="password_line">
+       <widget class="QLineEdit" name="passwordInput">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -111,7 +111,7 @@
       <item>
        <layout class="QHBoxLayout" name="buttons">
         <item>
-         <widget class="QPushButton" name="clear_button">
+         <widget class="QPushButton" name="clearButton">
           <property name="enabled">
            <bool>true</bool>
           </property>
@@ -142,7 +142,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="ok_button">
+         <widget class="QPushButton" name="okButton">
           <property name="minimumSize">
            <size>
             <width>0</width>

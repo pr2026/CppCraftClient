@@ -32,6 +32,18 @@ MainWindow::MainWindow(QWidget *parent)
             QMessageBox::warning(this, "Ошибка", message);
         }
     );
+
+    connect(
+        NetworkManager::instance(), &NetworkManager::registrationSuccess, this,
+        [=]() { ui->stackedWidget->setCurrentWidget(taskPage); }
+    );
+
+    connect(
+        NetworkManager::instance(), &NetworkManager::registrationError, this,
+        [this](const QString &message) {
+            QMessageBox::warning(this, "Ошибка", message);
+        }
+    );
 }
 
 MainWindow::~MainWindow() {

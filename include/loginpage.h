@@ -21,6 +21,7 @@ private:
 private slots:
     void clearClicked();
     void okClicked();
+    void registrationClicked();
 
     // signals:
     //     void loginSuccessful();

@@ -12,6 +12,8 @@ class NetworkManager : public QObject {
 public:
     static NetworkManager *instance();
     void login(const QString &username, const QString &password);
+    void registration(const QString &username, const QString &password);
+
     void sendRequest(
         const QString &urlEnd,
         const QJsonObject &data,
@@ -27,6 +29,8 @@ private:
 signals:
     void loginSuccess();
     void loginError(const QString &message);
+    void registrationSuccess();
+    void registrationError(const QString &message);
 };
 
 #endif  // NETWORKMANAGER_H

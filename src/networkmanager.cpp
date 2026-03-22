@@ -30,6 +30,23 @@ void NetworkManager::login(const QString &username, const QString &password) {
     });
 }
 
+void NetworkManager::registration(const QString &username, const QString &password) {
+    QJsonObject registrationData;
+    registrationData["username"] = username;
+    registrationData["password"] = password;
+
+    sendRequest("/registration", registrationData, [this](QNetworkReply *reply) {
+        if (reply->error() == QNetworkReply::NoError) {
+            QJsonObject jsonObj =
+                QJsonDocument::fromJson(reply->readAll()).object();
+            emit registrationSuccess();
+        } else {
+            emit registrationError("Server Error");
+        }
+        reply->deleteLater();
+    });
+}
+
 void NetworkManager::sendRequest(
     const QString &urlEnd,
     const QJsonObject &data,

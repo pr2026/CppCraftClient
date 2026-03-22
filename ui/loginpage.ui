@@ -168,7 +168,29 @@
            <string notr="true">background-color: rgb(255, 255, 255)</string>
           </property>
           <property name="text">
-           <string>OK</string>
+           <string>Login</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="registrationButton">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(255, 255, 255)</string>
+          </property>
+          <property name="text">
+           <string>Registration</string>
           </property>
          </widget>
         </item>

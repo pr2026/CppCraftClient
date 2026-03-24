@@ -3,6 +3,7 @@
 
 #include <QKeyEvent>
 #include <QMainWindow>
+#include <QMessageBox>
 #include "loginpage.h"
 #include "taskpage.h"
 

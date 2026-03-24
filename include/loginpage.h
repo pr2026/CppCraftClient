@@ -2,6 +2,7 @@
 #define LOGINPAGE_H
 
 #include <QWidget>
+#include "networkmanager.h"
 
 namespace Ui {
 class LoginPage;
@@ -20,9 +21,10 @@ private:
 private slots:
     void clearClicked();
     void okClicked();
+    void registrationClicked();
 
-signals:
-    void loginSuccessful();
+    // signals:
+    //     void loginSuccessful();
 };
 
 #endif  // LOGINPAGE_H

@@ -5,6 +5,10 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
+    // qDebug() << "До создания NetworkManager";
+    // NetworkManager* nm = NetworkManager::instance();
+    // qDebug() << "После создания NetworkManager, адрес:" << nm;
+
     showMaximized();
 
     loginPage = new LoginPage(this);
@@ -14,12 +18,32 @@ MainWindow::MainWindow(QWidget *parent)
     ui->stackedWidget->addWidget(taskPage);
 
     // для отладки taskPage!! потом поменять на loginPage!!
-    ui->stackedWidget->setCurrentWidget(taskPage);
-    // ui->stackedWidget->setCurrentWidget(loginPage);
+    // ui->stackedWidget->setCurrentWidget(taskPage);
+    ui->stackedWidget->setCurrentWidget(loginPage);
 
-    connect(loginPage, &LoginPage::loginSuccessful, this, [=]() {
-        ui->stackedWidget->setCurrentWidget(taskPage);
-    });
+    connect(
+        NetworkManager::instance(), &NetworkManager::loginSuccess, this,
+        [=]() { ui->stackedWidget->setCurrentWidget(taskPage); }
+    );
+
+    connect(
+        NetworkManager::instance(), &NetworkManager::loginError, this,
+        [this](const QString &message) {
+            QMessageBox::warning(this, "Ошибка", message);
+        }
+    );
+
+    connect(
+        NetworkManager::instance(), &NetworkManager::registrationSuccess, this,
+        [=]() { ui->stackedWidget->setCurrentWidget(taskPage); }
+    );
+
+    connect(
+        NetworkManager::instance(), &NetworkManager::registrationError, this,
+        [this](const QString &message) {
+            QMessageBox::warning(this, "Ошибка", message);
+        }
+    );
 }
 
 MainWindow::~MainWindow() {

@@ -10,6 +10,8 @@ LoginPage::LoginPage(QWidget *parent) : QWidget(parent), ui(new Ui::LoginPage) {
     );
     connect(ui->okButton, &QPushButton::clicked, this, &LoginPage::okClicked);
 
+    connect(ui->registrationButton, &QPushButton::clicked, this, &LoginPage::registrationClicked);
+
     ui->loginInput->setStyleSheet("background-color: white;");
     ui->passwordInput->setStyleSheet("background-color: white;");
 
@@ -29,14 +31,25 @@ void LoginPage::clearClicked() {
 }
 
 void LoginPage::okClicked() {
+    // emit NetworkManager::instance()->loginSuccess();  // for debugging!!
+
     QString login = ui->loginInput->text();
     QString password = ui->passwordInput->text();
 
     if (login == "" || password == "") {
         QMessageBox::warning(this, "Ошибка", "Неверный логин или пароль");
-    } else {
-        emit loginSuccessful();
-        QMessageBox::information(this, "Ура", "Вы зарегистрировались!");
-        hide();
     }
+    NetworkManager::instance()->login(login, password);
+}
+
+void LoginPage::registrationClicked() {
+    // emit NetworkManager::instance()->loginSuccess();  // for debugging!!
+
+    QString login = ui->loginInput->text();
+    QString password = ui->passwordInput->text();
+
+    if (login == "" || password == "") {
+        QMessageBox::warning(this, "Ошибка", "Неверный логин или пароль");
+    }
+    NetworkManager::instance()->login(login, password);
 }

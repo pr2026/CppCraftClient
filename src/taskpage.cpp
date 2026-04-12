@@ -1,6 +1,4 @@
 #include "taskpage.h"
-#include <QMessageBox>
-#include <string>
 #include "ui_taskpage.h"
 
 TaskPage::TaskPage(QWidget *parent) : QWidget(parent), ui(new Ui::TaskPage) {
@@ -39,11 +37,17 @@ TaskPage::TaskPage(QWidget *parent) : QWidget(parent), ui(new Ui::TaskPage) {
         "}"
     );
 
-    loadTasks();
-
     connect(
-        ui->tasksList, &QListWidget::currentRowChanged, this,
-        &TaskPage::showTask
+        NetworkManager::instance(), &NetworkManager::tasksLoadSuccess, this,
+        &TaskPage::tasksLoaded
+    );
+    connect(
+        NetworkManager::instance(), &NetworkManager::taskDetailsLoadSuccess, this,
+        &TaskPage::taskDetailsLoaded
+    );
+    connect(
+        ui->tasksList, &QListWidget::itemClicked, this,
+        &TaskPage::taskSelected
     );
     connect(
         ui->clearButton, &QPushButton::clicked, this, &TaskPage::clearClicked
@@ -58,23 +62,39 @@ TaskPage::~TaskPage() {
 }
 
 void TaskPage::loadTasks() {
-    // sample tasks
-    tasksList = {
-        {1, "Hello World", "Напишите программу, которая выведет 'Hello World'"},
-        {2, "Сумма чисел", "На вход поступают 2 числа, найти их сумму"},
-        {3, "Перевернуть вектор", "Переверните вектор"}};
+    NetworkManager::instance()->loadTasks();
+}
 
-    for (const Task &task : tasksList) {
-        QString text = "№" + QString::number(task.id) + ". " + task.title;
-        ui->tasksList->addItem(text);
+void TaskPage::tasksLoaded(const QJsonObject &response) {
+    QJsonArray tasksArray = response["tasks"].toArray();
+    ui->tasksList->clear();
+
+    for (const QJsonValue &task : tasksArray) {
+        QJsonObject object = task.toObject();
+        int id = object["id"].toInt();
+        QString title = object["title"].toString();
+
+        QString text = "№" + QString("%1. %2").arg(id).arg(title);
+        QListWidgetItem *taskItem = new QListWidgetItem(text);
+        taskItem->setData(Qt::UserRole, id);
+        ui->tasksList->addItem(taskItem);
     }
 }
 
-void TaskPage::showTask(int index) {
-    Task currentTask = tasksList[index];
-    QString text = "№" + QString::number(currentTask.id) + ". " +
-                   currentTask.title + ".\n\n";
-    text += currentTask.description + ".\n";
+void TaskPage::taskSelected(QListWidgetItem *taskItem) {
+    int taskId = taskItem->data(Qt::UserRole).toInt();
+    NetworkManager::instance()->loadTaskDetails(taskId);
+}
+
+void TaskPage::taskDetailsLoaded(const QJsonObject &details) {
+    int id = details["id"].toInt();
+    QString title = details["title"].toString();
+    QString description = details["description"].toString();
+    QString difficulty = details["difficulty"].toString();
+
+    QString text = "№" + QString::number(id) + ". " + title + ".\n";
+    text += "Difficulty: " + difficulty + ".\n\n";
+    text += description + "\n";
     ui->taskCondition->setText(text);
 }
 

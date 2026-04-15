@@ -1,13 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
-
-    // qDebug() << "До создания NetworkManager";
-    // NetworkManager* nm = NetworkManager::instance();
-    // qDebug() << "После создания NetworkManager, адрес:" << nm;
 
     showMaximized();
 
@@ -23,23 +20,19 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(
         NetworkManager::instance(), &NetworkManager::loginSuccess, this,
-        [=]() { ui->stackedWidget->setCurrentWidget(taskPage); }
-    );
-
-    connect(
-        NetworkManager::instance(), &NetworkManager::loginError, this,
-        [this](const QString &message) {
-            QMessageBox::warning(this, "Ошибка", message);
+        [=]() { ui->stackedWidget->setCurrentWidget(taskPage);
+        taskPage->loadTasks();
         }
     );
 
     connect(
         NetworkManager::instance(), &NetworkManager::registrationSuccess, this,
-        [=]() { ui->stackedWidget->setCurrentWidget(taskPage); }
+        [=]() { ui->stackedWidget->setCurrentWidget(taskPage);
+        taskPage->loadTasks();}
     );
 
     connect(
-        NetworkManager::instance(), &NetworkManager::registrationError, this,
+        NetworkManager::instance(), &NetworkManager::error, this,
         [this](const QString &message) {
             QMessageBox::warning(this, "Ошибка", message);
         }

@@ -7,6 +7,7 @@ struct Task {
     int id;
     QString title;
     QString description;
+    QString difficulty;
 };
 
 #endif  // TASK_H

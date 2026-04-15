@@ -55,6 +55,8 @@ TaskPage::TaskPage(QWidget *parent) : QWidget(parent), ui(new Ui::TaskPage) {
     connect(
         ui->submitButton, &QPushButton::clicked, this, &TaskPage::submitClicked
     );
+    connect(NetworkManager::instance(), &NetworkManager::solutionResult, this, &TaskPage::solutionResult);
+    connect(NetworkManager::instance(), &NetworkManager::solutionError, this, &TaskPage::solutionError);
 }
 
 TaskPage::~TaskPage() {
@@ -82,8 +84,8 @@ void TaskPage::tasksLoaded(const QJsonObject &response) {
 }
 
 void TaskPage::taskSelected(QListWidgetItem *taskItem) {
-    int taskId = taskItem->data(Qt::UserRole).toInt();
-    NetworkManager::instance()->loadTaskDetails(taskId);
+    currentTaskId = taskItem->data(Qt::UserRole).toInt();
+    NetworkManager::instance()->loadTaskDetails(currentTaskId);
 }
 
 void TaskPage::taskDetailsLoaded(const QJsonObject &details) {
@@ -103,6 +105,42 @@ void TaskPage::clearClicked() {
 }
 
 void TaskPage::submitClicked() {
-    // sample
-    QMessageBox::information(this, "Ура", "Ваш код отправлен на проверку!");
+    if (currentTaskId == -1) {
+        QMessageBox::warning(this, "Error", "Please choose the task to submit");
+    }
+    QString code = ui->codeEdit->toPlainText();
+    if (code.isEmpty()) {
+        QMessageBox::warning(this, "Error", "Please enter the solution code");
+    }
+    ui->submitButton->setEnabled(false);
+    ui->submitButton->setText("Sending...");
+    NetworkManager::instance()->sendSolution(currentTaskId, code);
+}
+
+void TaskPage::solutionResult(const QJsonObject &result) {
+    ui->submitButton->setEnabled(true);
+    ui->submitButton->setText("Submit");
+    QString status = result["status"].toString();
+
+    if (status == "finished") {
+        int passedTests = result["passed_tests"].toInt();
+        int totalTests = result["total_tests"].toInt();
+        QString verdict = result["verdict"].toString();
+        if (verdict == "OK") {
+            QMessageBox::information(this, "Completed", "All tests passed");
+            ui->codeEdit->clear();
+        } else {
+            QString passedTestsText = "Tests passed: " + QString::number(passedTests) + "/" + QString::number(totalTests) + ".\n";
+            QMessageBox::information(this, "Some mistakes", passedTestsText);
+        }
+    } else {
+        QString compileError = result["compile_error"].toString();
+        QMessageBox::warning(this, "Error!", compileError);
+    }
+}
+
+void TaskPage::solutionError(const QString &message) {
+    ui->submitButton->setEnabled(true);
+    ui->submitButton->setText("Submit");
+    QMessageBox::warning(this, "Error", message);
 }

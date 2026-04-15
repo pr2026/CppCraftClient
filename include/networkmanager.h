@@ -16,7 +16,7 @@ public:
     void registration(const QString &username, const QString &password);
     void loadTasks();
     void loadTaskDetails(int taskId);
-    void sendSolution();
+    void sendSolution(int taskId, const QString &code);
 
     void sendRequest(
         const QString &urlEnd,
@@ -36,6 +36,8 @@ signals:
     void registrationSuccess();
     void tasksLoadSuccess(const QJsonObject &response);
     void taskDetailsLoadSuccess(const QJsonObject &details);
+    void solutionResult(const QJsonObject &result);
+    void solutionError(const QString &message);
     void error(const QString &message);
 };
 

@@ -26,6 +26,7 @@ public:
 private:
     Ui::TaskPage *ui;
     QVector<Task> tasksList;
+    int currentTaskId = -1;
 
 private slots:
     void tasksLoaded(const QJsonObject& tasks);
@@ -33,6 +34,8 @@ private slots:
     void taskDetailsLoaded(const QJsonObject &details);
     void clearClicked();
     void submitClicked();
+    void solutionResult(const QJsonObject &result);
+    void solutionError(const QString &message);
 };
 
 #endif  // TASKPAGE_H

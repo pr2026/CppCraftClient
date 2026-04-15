@@ -80,6 +80,35 @@ void NetworkManager::loadTaskDetails(int taskId) {
     }, "GET");
 }
 
+void NetworkManager::sendSolution(int taskId, const QString &code) {
+    QJsonObject submissionData;
+    submissionData["task_id"] = taskId;
+    submissionData["code"] = code;
+
+    QString url = "/tasks/" + QString::number(taskId) + "/submit";
+    sendRequest(url, submissionData, [this](QNetworkReply *reply) {
+        if (reply->error() == QNetworkReply::NoError) {
+
+            // can be changed after debugging
+
+            QByteArray responseData = reply->readAll();
+            qDebug() << "Ответ сервера:" << responseData;
+
+            QJsonDocument document = QJsonDocument::fromJson(responseData);
+            if (document.isNull()) {
+                emit solutionError("Server returned wrong format");
+                return;
+            }
+            QJsonObject jsonObj = document.object();
+
+            emit solutionResult(jsonObj);
+        } else {
+            emit solutionError("Sending error" + reply->errorString());
+        }
+        reply->deleteLater();
+    });
+}
+
 void NetworkManager::sendRequest(
     const QString &urlEnd,
     const QJsonObject &data,

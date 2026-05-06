@@ -34,7 +34,7 @@ void LoginPage::clearClicked() {
 }
 
 void LoginPage::okClicked() {
-    // emit NetworkManager::instance()->loginSuccess();  // for debugging!!
+    emit NetworkManager::instance()->loginSuccess();  // for debugging!!
 
     QString login = ui->loginInput->text();
     QString password = ui->passwordInput->text();
@@ -46,7 +46,7 @@ void LoginPage::okClicked() {
 }
 
 void LoginPage::registrationClicked() {
-    // emit NetworkManager::instance()->loginSuccess();  // for debugging!!
+    emit NetworkManager::instance()->registrationSuccess();  // for debugging!!
 
     QString login = ui->loginInput->text();
     QString password = ui->passwordInput->text();

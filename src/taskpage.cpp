@@ -5,14 +5,11 @@ TaskPage::TaskPage(QWidget *parent) : QWidget(parent), ui(new Ui::TaskPage) {
     ui->setupUi(this);
     this->setContentsMargins(0, 0, 0, 0);
     ui->rightWidget->setContentsMargins(0, 0, 0, 0);
+    this->setStyleSheet("background-color: #ffffff;");
 
     ui->splitter->setStretchFactor(0, 0);
     ui->splitter->setStretchFactor(1, 1);
     ui->splitter->setSizes({400, width() - 400});
-
-    ui->splitter_2->setStretchFactor(0, 1);
-    ui->splitter_2->setStretchFactor(1, 2);
-    ui->splitter_2->setSizes({100, height() - 130});
 
     ui->taskCondition->setWordWrapMode(QTextOption::WordWrap);
 
@@ -20,9 +17,12 @@ TaskPage::TaskPage(QWidget *parent) : QWidget(parent), ui(new Ui::TaskPage) {
     ui->tasksList->setGridSize(QSize(200, 35));
 
     QFont font;
-    font.setPointSize(11);
+    font.setFamily("Consolas");
+    font.setPointSize(10);
     ui->tasksList->setFont(font);
     ui->taskCondition->setFont(font);
+    ui->clearButton->setFont(font);
+    ui->submitButton->setFont(font);
 
     ui->tasksList->setStyleSheet(
         "QListWidget::item:selected {"
@@ -36,6 +36,22 @@ TaskPage::TaskPage(QWidget *parent) : QWidget(parent), ui(new Ui::TaskPage) {
         "    outline: none;"
         "}"
     );
+
+    codeEditor = new QsciScintilla(this);
+    QsciLexerCPP *lexer = new QsciLexerCPP(this);
+    codeEditor->setLexer(lexer);
+
+    codeEditorSetter(lexer);
+
+    ui->splitter_2->insertWidget(1, codeEditor);
+    ui->splitter_2->setStretchFactor(0, 1);
+    ui->splitter_2->setStretchFactor(1, 2);
+    ui->splitter_2->setSizes({100, height() - 130});
+
+    ui->taskCondition->setStyleSheet("background-color: #f4eee8;");
+    ui->tasksList->setStyleSheet("background-color: #f4eee8;");
+    ui->submitButton->setStyleSheet("background-color: #f4dede;");
+    ui->clearButton->setStyleSheet("background-color: #f4dede;");
 
     connect(
         NetworkManager::instance(), &NetworkManager::tasksLoadSuccess, this,
@@ -61,6 +77,46 @@ TaskPage::TaskPage(QWidget *parent) : QWidget(parent), ui(new Ui::TaskPage) {
 
 TaskPage::~TaskPage() {
     delete ui;
+}
+
+void TaskPage::codeEditorSetter(QsciLexerCPP *lexer) {
+    codeEditor->setUtf8(true);
+
+    codeEditor->setMarginLineNumbers(1, true);
+    codeEditor->setMarginWidth(1, 25);
+    codeEditor->setMarginsBackgroundColor(QColor("#e0dad6"));
+
+    codeEditor->setCaretLineVisible(true);
+    codeEditor->setCaretLineBackgroundColor(QColor("#f4dede"));
+    codeEditor->setAutoIndent(true);
+    codeEditor->setTabWidth(4);
+
+    QFont codeEditorFont;
+    codeEditorFont.setFamily("Consolas");
+    codeEditorFont.setPointSize(11);
+    lexer->setFont(codeEditorFont);
+    codeEditor->setMarginsFont(codeEditorFont);
+
+    lexer->setPaper(QColor("#f4eee8"));
+    codeEditor->setColor(QColor("#615f5f"));
+
+    lexer->setColor(QColor("#a49e9e"), QsciLexerCPP::Comment);
+    lexer->setColor(QColor("#a49e9e"), QsciLexerCPP::CommentLine);
+
+    lexer->setColor(QColor("#5F4B8B"), QsciLexerCPP::Keyword);
+    lexer->setColor(QColor("#5F4B8B"), QsciLexerCPP::KeywordSet2);
+    lexer->setColor(QColor("#5F4B8B"), QsciLexerCPP::Operator);
+
+    lexer->setColor(QColor("#CA4286"), QsciLexerCPP::GlobalClass);
+
+    lexer->setColor(QColor("#009473"), QsciLexerCPP::Number);
+
+    lexer->setColor(QColor("#88B04B"), QsciLexerCPP::DoubleQuotedString);
+    lexer->setColor(QColor("#45B5AA"), QsciLexerCPP::SingleQuotedString);
+
+    lexer->setColor(QColor("#0F4C81"), QsciLexerCPP::PreProcessor);
+
+    lexer->setColor(QColor("#D94F70"), QsciLexerCPP::Identifier);
 }
 
 void TaskPage::loadTasks() {
@@ -101,14 +157,14 @@ void TaskPage::taskDetailsLoaded(const QJsonObject &details) {
 }
 
 void TaskPage::clearClicked() {
-    ui->codeEdit->clear();
+    codeEditor->clear();
 }
 
 void TaskPage::submitClicked() {
     if (currentTaskId == -1) {
         QMessageBox::warning(this, "Error", "Please choose the task to submit");
     }
-    QString code = ui->codeEdit->toPlainText();
+    QString code = codeEditor->text();
     if (code.isEmpty()) {
         QMessageBox::warning(this, "Error", "Please enter the solution code");
     }
@@ -128,7 +184,7 @@ void TaskPage::solutionResult(const QJsonObject &result) {
         QString verdict = result["verdict"].toString();
         if (verdict == "OK") {
             QMessageBox::information(this, "Completed", "All tests passed");
-            ui->codeEdit->clear();
+            codeEditor->clear();
         } else {
             QString passedTestsText = "Tests passed: " + QString::number(passedTests) + "/" + QString::number(totalTests) + ".\n";
             QMessageBox::information(this, "Some mistakes", passedTestsText);

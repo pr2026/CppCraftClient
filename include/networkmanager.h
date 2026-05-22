@@ -13,7 +13,7 @@ class NetworkManager : public QObject {
 public:
     static NetworkManager *instance();
     void login(const QString &username, const QString &password);
-    void registration(const QString &username, const QString &password);
+    void registration(const QString &username, const QString &password, const QString &role);
     void loadTasks();
     void loadTaskDetails(int taskId);
     void sendSolution(int taskId, const QString &code);
@@ -29,7 +29,7 @@ private:
     explicit NetworkManager(QObject *parent = nullptr);
     static NetworkManager *m_instance;
     QNetworkAccessManager *manager;
-    QString baseUrl = "http://172.16.124.64:8080";
+    QString baseUrl = "http://172.16.125.139:8080";
 
 signals:
     void loginSuccess();

@@ -32,11 +32,12 @@ void NetworkManager::login(const QString &username, const QString &password) {
 
 void NetworkManager::registration(
     const QString &username,
-    const QString &password
+    const QString &password, const QString &role
 ) {
     QJsonObject registrationData;
     registrationData["username"] = username;
     registrationData["password"] = password;
+    registrationData["role"] = role;
 
     sendRequest(
         "/registration", registrationData,

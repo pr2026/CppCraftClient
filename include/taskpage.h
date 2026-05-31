@@ -8,6 +8,8 @@
 #include <QMessageBox>
 #include <QJsonArray>
 #include <string>
+#include <Qsci/qsciscintilla.h>
+#include <Qsci/qscilexercpp.h>
 #include "task.h"
 #include "networkmanager.h"
 
@@ -22,11 +24,13 @@ public:
     explicit TaskPage(QWidget *parent = nullptr);
     ~TaskPage();
     void loadTasks();
+    void codeEditorSetter(QsciLexerCPP *lexer);
 
 private:
     Ui::TaskPage *ui;
     QVector<Task> tasksList;
     int currentTaskId = -1;
+    QsciScintilla *codeEditor;
 
 private slots:
     void tasksLoaded(const QJsonObject& tasks);

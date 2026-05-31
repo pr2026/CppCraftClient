@@ -3,11 +3,16 @@ project(CppCraft_front LANGUAGES CXX)
 
 find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets)
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets Network)
+# find_package(QScintilla REQUIRED)
 
 qt_standard_project_setup()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_CURRENT_SOURCE_DIR}/ui)
+
+set(QSCINTILLA_INCLUDE_DIR "C:/msys64/ucrt64/include/Qt6")
+set(QSCINTILLA_LIBRARY "C:/msys64/ucrt64/lib/libqscintilla2_qt6.dll.a")
+include_directories(${QSCINTILLA_INCLUDE_DIR})
 
 qt_add_executable(CppCraft_front
     WIN32 MACOSX_BUNDLE
@@ -23,8 +28,6 @@ qt_add_executable(CppCraft_front
     include/task.h
     include/taskpage.h
     include/networkmanager.h src/networkmanager.cpp
-
-
 )
 
 target_link_libraries(CppCraft_front
@@ -32,9 +35,11 @@ target_link_libraries(CppCraft_front
         Qt::Core
         Qt::Widgets
         Qt::Network
+        ${QSCINTILLA_LIBRARY}
 )
 
 include(GNUInstallDirs)
+
 
 install(TARGETS CppCraft_front
     BUNDLE  DESTINATION .

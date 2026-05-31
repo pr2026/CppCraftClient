@@ -84,7 +84,6 @@
            </sizepolicy>
           </property>
          </widget>
-         <widget class="QTextEdit" name="codeEdit"/>
         </widget>
        </item>
        <item>

@@ -1,21 +1,46 @@
 #ifndef TEACHERPAGE_H
 #define TEACHERPAGE_H
 
+#include "networkmanager.h"
+#include "task.h"
 #include <QWidget>
+#include <QListWidget>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QMessageBox>
 
 namespace Ui {
-class teacherPage;
+class TeacherPage;
 }
 
-class teacherPage : public QWidget {
+class TeacherPage : public QWidget {
     Q_OBJECT
 
 public:
-    explicit teacherPage(QWidget *parent = nullptr);
-    ~teacherPage();
+    explicit TeacherPage(QWidget *parent = nullptr);
+    ~TeacherPage();
+    void loadTasks();
 
 private:
-    Ui::teacherPage *ui;
+    Ui::TeacherPage *ui;
+    int currentTaskId = -1;
+    bool isCreateMode = false;
+
+    void showViewMode();
+    void showCreateMode();
+    void fillEditForm(const QJsonObject &details);
+
+private slots:
+    void tasksLoaded(const QJsonObject& tasks);
+    void taskDetailsLoaded(const QJsonObject &details);
+    void taskSelected(QListWidgetItem *taskItem);
+
+    void addTaskClicked();
+    void editTaskClicked(int taskId);
+    void deleteTaskClicked(int taskId);
+    void createTaskClicked();
+    void calcelCreatingButton();
+
 };
 
 #endif  // TEACHERPAGE_H

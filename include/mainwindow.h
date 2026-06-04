@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include "loginpage.h"
 #include "taskpage.h"
+#include "teacherpage.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -26,6 +27,11 @@ private:
     Ui::MainWindow *ui;
     LoginPage *loginPage;
     TaskPage *taskPage;
+    TeacherPage *teacherPage;
+
+
+private slots:
+    void onLoginSuccess(const QString &role);
 };
 
 #endif  // MAINWINDOW_H

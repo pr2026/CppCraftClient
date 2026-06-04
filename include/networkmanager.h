@@ -32,8 +32,8 @@ private:
     QString baseUrl = "http://172.16.125.139:8080";
 
 signals:
-    void loginSuccess();
-    void registrationSuccess();
+    void loginSuccess(const QString &role);
+    void registrationSuccess(const QString &role);
     void tasksLoadSuccess(const QJsonObject &response);
     void taskDetailsLoadSuccess(const QJsonObject &details);
     void solutionResult(const QJsonObject &result);

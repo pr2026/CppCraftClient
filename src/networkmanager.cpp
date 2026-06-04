@@ -22,7 +22,8 @@ void NetworkManager::login(const QString &username, const QString &password) {
         if (reply->error() == QNetworkReply::NoError) {
             QJsonObject jsonObj =
                 QJsonDocument::fromJson(reply->readAll()).object();
-            emit loginSuccess();
+            QString role = jsonObj["role"].toString();
+            emit loginSuccess(role);
         } else {
             emit error("Server Error");
         }
@@ -45,7 +46,8 @@ void NetworkManager::registration(
             if (reply->error() == QNetworkReply::NoError) {
                 QJsonObject jsonObj =
                     QJsonDocument::fromJson(reply->readAll()).object();
-                emit registrationSuccess();
+                QString role_ans = jsonObj["role"].toString();
+                emit registrationSuccess(role_ans);
             } else {
                 emit error("Server Error");
             }

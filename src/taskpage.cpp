@@ -3,6 +3,7 @@
 
 TaskPage::TaskPage(QWidget *parent) : QWidget(parent), ui(new Ui::TaskPage) {
     ui->setupUi(this);
+
     this->setContentsMargins(0, 0, 0, 0);
     ui->rightWidget->setContentsMargins(0, 0, 0, 0);
     this->setStyleSheet("background-color: #ffffff;");
@@ -17,7 +18,7 @@ TaskPage::TaskPage(QWidget *parent) : QWidget(parent), ui(new Ui::TaskPage) {
     ui->tasksList->setGridSize(QSize(200, 35));
 
     QFont font;
-    font.setFamily("Consolas");
+    font.setFamily("Century Gothic");
     font.setPointSize(10);
     ui->tasksList->setFont(font);
     ui->taskCondition->setFont(font);
@@ -52,6 +53,8 @@ TaskPage::TaskPage(QWidget *parent) : QWidget(parent), ui(new Ui::TaskPage) {
     ui->tasksList->setStyleSheet("background-color: #f4eee8;");
     ui->submitButton->setStyleSheet("background-color: #f4dede;");
     ui->clearButton->setStyleSheet("background-color: #f4dede;");
+
+    loadTasks();
 
     connect(
         NetworkManager::instance(), &NetworkManager::tasksLoadSuccess, this,
@@ -120,6 +123,17 @@ void TaskPage::codeEditorSetter(QsciLexerCPP *lexer) {
 }
 
 void TaskPage::loadTasks() {
+    // // sample tasks
+    // tasksList = {
+    //              {1, "Hello World", "Напишите программу, которая выведет 'Hello World'"},
+    //              {2, "Сумма чисел", "На вход поступают 2 числа, найти их сумму"},
+    //              {3, "Перевернуть вектор", "Переверните вектор"}};
+
+    // for (const Task &task : tasksList) {
+    //     QString text = "№" + QString::number(task.id) + ". " + task.title;
+    //     ui->tasksList->addItem(text);
+    // }
+
     NetworkManager::instance()->loadTasks();
 }
 

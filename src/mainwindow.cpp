@@ -10,25 +10,30 @@ MainWindow::MainWindow(QWidget *parent)
 
     loginPage = new LoginPage(this);
     taskPage = new TaskPage(this);
+    teacherPage = new TeacherPage(this);
 
     ui->stackedWidget->addWidget(loginPage);
     ui->stackedWidget->addWidget(taskPage);
+    ui->stackedWidget->addWidget(teacherPage);
 
     // для отладки taskPage!! потом поменять на loginPage!!
     // ui->stackedWidget->setCurrentWidget(taskPage);
-    ui->stackedWidget->setCurrentWidget(loginPage);
+
+    // для отладки teacherPage
+    ui->stackedWidget->setCurrentWidget(teacherPage);
+
+    // ui->stackedWidget->setCurrentWidget(loginPage);
 
     connect(
-        NetworkManager::instance(), &NetworkManager::loginSuccess, this,
-        [=]() { ui->stackedWidget->setCurrentWidget(taskPage);
-        taskPage->loadTasks();
-        }
-    );
+        NetworkManager::instance(), &NetworkManager::loginSuccess, this, &MainWindow::onLoginSuccess);
 
     connect(
         NetworkManager::instance(), &NetworkManager::registrationSuccess, this,
-        [=]() { ui->stackedWidget->setCurrentWidget(taskPage);
-        taskPage->loadTasks();}
+        [=]() {
+            // if (role )
+            ui->stackedWidget->setCurrentWidget(taskPage);
+        taskPage->loadTasks();
+        }
     );
 
     connect(
@@ -41,4 +46,14 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow() {
     delete ui;
+}
+
+void MainWindow::onLoginSuccess(const QString &role) {
+    if (role == "student") {
+        ui->stackedWidget->setCurrentWidget(taskPage);
+        taskPage->loadTasks();
+    } else if (role == "student") {
+        ui->stackedWidget->setCurrentWidget(teacherPage);
+        teacherPage->loadTasks();
+    }
 }

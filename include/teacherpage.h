@@ -29,6 +29,8 @@ private:
     void showViewMode();
     void showCreateMode();
     void fillEditForm(const QJsonObject &details);
+    QJsonArray parseTests(const QString &testsText);
+    void showTests(const QJsonArray& tests);
 
 private slots:
     void tasksLoaded(const QJsonObject& tasks);

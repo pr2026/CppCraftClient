@@ -93,18 +93,19 @@ void TeacherPage::showCreateMode() {
 }
 
 void TeacherPage::loadTasks() {
-    ui->taskList->clear();
-    QVector<Task> tasksList = {
-                 {1, "Hello World", "Напишите программу, которая выведет 'Hello World'"},
-                 {2, "Сумма чисел", "На вход поступают 2 числа, найти их сумму"},
-                 {3, "Перевернуть вектор", "Переверните вектор"}};
+    // ui->taskList->clear();
 
-    for (const Task &task : tasksList) {
-        QString text = "№" + QString::number(task.id) + ". " + task.title;
-        ui->taskList->addItem(text);
-    }
+    // QVector<Task> tasksList = {
+    //              {1, "Hello World", "Напишите программу, которая выведет 'Hello World'"},
+    //              {2, "Сумма чисел", "На вход поступают 2 числа, найти их сумму"},
+    //              {3, "Перевернуть вектор", "Переверните вектор"}};
 
-    // NetworkManager::instance()->loadTasks();
+    // for (const Task &task : tasksList) {
+    //     QString text = "№" + QString::number(task.id) + ". " + task.title;
+    //     ui->taskList->addItem(text);
+    // }
+
+    NetworkManager::instance()->loadTasks();
 }
 
 void TeacherPage::tasksLoaded(const QJsonObject &response) {
@@ -135,10 +136,34 @@ void TeacherPage::taskDetailsLoaded(const QJsonObject &details) {
     QString description = details["description"].toString();
     QString difficulty = details["difficulty"].toString();
 
+
     QString text = "№" + QString::number(id) + ". " + title + ".\n";
     text += "Difficulty: " + difficulty + ".\n\n";
     text += description + "\n";
     ui->taskCondition->setText(text);
+
+    showTests(details["tests"].toArray());
+
+}
+
+void TeacherPage::showTests(const QJsonArray &tests) {
+    if (tests.isEmpty()) {
+        ui->tests->setText("no tests have been added yet");
+        return;
+    }
+
+    QString testsText;
+
+    for (const QJsonValue &value : tests) {
+        QJsonObject test = value.toObject();
+        QString input = test["input"].toString();
+        QString output = test["expected_output"].toString();
+
+        testsText += "input: " + input + "\n";
+        testsText += "output: " + output + "\n\n";
+    }
+
+    ui->tests->setText(testsText);
 }
 
 void TeacherPage::addTaskClicked() {
@@ -147,30 +172,28 @@ void TeacherPage::addTaskClicked() {
 }
 
 void TeacherPage::deleteTaskClicked(int taskId) {
+
+    // TODO: добавить ошибку если задание не выбрано
     QMessageBox::StandardButton reply = QMessageBox::question(this, "Deleting", "Are you sure you want to delete this task?", QMessageBox::Yes | QMessageBox::No);
     if (reply == QMessageBox::Yes) {
-        // TODO: добавить этот метод
-
-        // NetworkManager::instance()->deleteTask(task);
+        NetworkManager::instance()->deleteTask(taskId);
         loadTasks();
     }
 }
 
 void TeacherPage::editTaskClicked(int taskId) {
+
+    // TODO: добавить ошибку если задание не выбрано
     currentTaskId = taskId;
     NetworkManager::instance()->loadTaskDetails(taskId);
     showCreateMode();
-    ui->createButton->setText("Save");
     connect(NetworkManager::instance(), &NetworkManager::taskDetailsLoadSuccess, this, &TeacherPage::fillEditForm, Qt::SingleShotConnection);
-    ui->createButton->setText("Create");
 }
 
 void TeacherPage::fillEditForm(const QJsonObject &details) {
-
-    // TODO: чекнуть как это у Яры называется
     ui->nameInput->setText(details["title"].toString());
     ui->difficultyBox->setCurrentText(details["difficulty"].toString());
-    ui->conditionEdit->setText((details["condition"].toString()));
+    ui->conditionEdit->setText((details["   description"].toString()));
     ui->tests->setText(details["tests"].toString());
 }
 
@@ -178,30 +201,50 @@ void TeacherPage::createTaskClicked() {
     QString taskName = ui->nameInput->text();
     QString difficulty = ui->difficultyBox->currentText();
     QString condition = ui->conditionEdit->toPlainText();
-    QString tests = ui->testsEdit->toPlainText();  // изменить!!!
+    QString testsText = ui->testsEdit->toPlainText();
+    QJsonArray tests = parseTests(testsText);
 
     if (taskName.isEmpty() || condition.isEmpty()) {
         QMessageBox::warning(this, "Error", "Input the task name and condition");
         return;
     }
 
-    // TODO: проверить как это все называется на сервере у Яры
     QJsonObject task;
     task["title"] = taskName;
     task["difficulty"] = difficulty;
-    task["condition"] = condition;
+    task["description"] = condition;
     task["tests"] = tests;
 
-
-    // TODO: сделать эти методы для NetworkManager
     if (currentTaskId == -1) {
-        // NetworkManager::instance()->createTask(task);
+        NetworkManager::instance()->createTask(task);
     } else {
-        // NetworkManager::instance()->editTask(currentTaskId, task);
+        NetworkManager::instance()->editTask(currentTaskId, task);
     }
 
     showViewMode();
     loadTasks();
+}
+
+QJsonArray TeacherPage::parseTests(const QString &testsText) {
+    QJsonArray testsArray;
+
+    QJsonDocument document = QJsonDocument::fromJson(testsText.toUtf8());
+    if (!document.isNull() && document.isArray()) {
+        return document.array();
+    }
+
+    QStringList lines = testsText.split('\n', Qt::SkipEmptyParts);
+    for (const QString &line : lines) {
+        QStringList divided = line.split(":");
+        if (divided.size() == 2) {
+            QJsonObject test;
+            test["input"] = divided[0].trimmed();
+            test["expected_output"] = divided[1].trimmed();
+            testsArray.append(test);
+        }
+    }
+
+    return testsArray;
 }
 
 void TeacherPage::calcelCreatingButton() {

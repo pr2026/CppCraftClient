@@ -28,7 +28,7 @@ void NetworkManager::login(const QString &username, const QString &password) {
             emit error("Server Error");
         }
         reply->deleteLater();
-    });
+    }, "GET");
 }
 
 void NetworkManager::registration(
@@ -53,7 +53,7 @@ void NetworkManager::registration(
             }
             reply->deleteLater();
         }
-    );
+    , "GET");
 }
 
 void NetworkManager::loadTasks() {
@@ -109,7 +109,45 @@ void NetworkManager::sendSolution(int taskId, const QString &code) {
             emit solutionError("Sending error" + reply->errorString());
         }
         reply->deleteLater();
-    });
+    }, "POST");
+}
+
+void NetworkManager::createTask(const QJsonObject &task) {
+    sendRequest("/tasks", task, [this](QNetworkReply *reply) {
+        if (reply->error() == QNetworkReply::NoError) {
+            emit taskCreated();
+        } else {
+            emit error("Failed to create task " + reply->errorString());
+        }
+        reply->deleteLater();
+    }, "POST");
+}
+
+void NetworkManager::editTask(int taskId, const QJsonObject &taskData) {
+    QString url = "/tasks/" + QString::number(taskId);
+
+   // TODO: уточнить какой метод
+
+    sendRequest(url, taskData, [this](QNetworkReply *reply) {
+        if (reply->error() == QNetworkReply::NoError) {
+            emit taskEdited();
+        } else {
+            emit error("Failed to edit task " + reply->errorString());
+        }
+        reply->deleteLater();
+    }, "PUT");
+}
+
+void NetworkManager::deleteTask(int taskId) {
+    QString url = "/tasks/" + QString::number(taskId);
+    sendRequest(url, QJsonObject(), [this](QNetworkReply *reply) {
+        if (reply->error() == QNetworkReply::NoError) {
+            emit taskDeleted();
+        } else {
+            emit error("Failed to delete task " + reply->errorString());
+        }
+        reply->deleteLater();
+    }, "DELETE");
 }
 
 void NetworkManager::sendRequest(
@@ -130,9 +168,14 @@ void NetworkManager::sendRequest(
     QNetworkReply *reply = nullptr;
     if (method == "GET") {
         reply = manager->get(request);
-    } else {
+    } else if (method == "POST") {
         QJsonDocument document(data);
         reply = manager->post(request, document.toJson());
+    } else if (method == "PUT") {
+        QJsonDocument document(data);
+        reply = manager->put(request, document.toJson());
+    } else if (method == "DELETE") {
+        reply = manager->deleteResource(request);
     }
 
     connect(reply, &QNetworkReply::finished, [reply, callback]() {

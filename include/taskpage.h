@@ -1,17 +1,17 @@
 #ifndef TASKPAGE_H
 #define TASKPAGE_H
 
-#include <QVector>
-#include <QWidget>
+#include <Qsci/qscilexercpp.h>
+#include <Qsci/qsciscintilla.h>
+#include <QJsonArray>
 #include <QListWidget>
 #include <QListWidgetItem>
 #include <QMessageBox>
-#include <QJsonArray>
+#include <QVector>
+#include <QWidget>
 #include <string>
-#include <Qsci/qsciscintilla.h>
-#include <Qsci/qscilexercpp.h>
-#include "task.h"
 #include "networkmanager.h"
+#include "task.h"
 
 namespace Ui {
 class TaskPage;
@@ -33,7 +33,7 @@ private:
     QsciScintilla *codeEditor;
 
 private slots:
-    void tasksLoaded(const QJsonObject& tasks);
+    void tasksLoaded(const QJsonObject &tasks);
     void taskSelected(QListWidgetItem *taskItem);
     void taskDetailsLoaded(const QJsonObject &details);
     void clearClicked();

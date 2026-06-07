@@ -28,6 +28,7 @@ qt_add_executable(CppCraft_front
     include/task.h
     include/taskpage.h
     include/networkmanager.h src/networkmanager.cpp
+    include/teacherpage.h src/teacherpage.cpp ui/teacherpage.ui
 )
 
 target_link_libraries(CppCraft_front

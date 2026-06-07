@@ -40,40 +40,76 @@ TeacherPage::TeacherPage(QWidget *parent)
         "QListWidget:focus {"
         "    outline: none;"
         "}"
-        );
+    );
 
     showViewMode();
-    loadTasks();
+
+    QString buttonStyle =
+        "QPushButton {"
+        "    min-height: 25px;"
+        "    max-height: 25px;"
+        "    background-color: rgb(254,224,224);"
+        "}";
+
+    ui->addButton->setStyleSheet(buttonStyle);
+    ui->createButton->setStyleSheet(buttonStyle);
+    ui->cancelButton->setStyleSheet(buttonStyle);
+    ui->deleteButton->setStyleSheet(buttonStyle);
+    ui->editButton->setStyleSheet(buttonStyle);
 
     connect(
         NetworkManager::instance(), &NetworkManager::tasksLoadSuccess, this,
         &TeacherPage::tasksLoaded
-        );
+    );
 
     connect(
-        NetworkManager::instance(), &NetworkManager::taskDetailsLoadSuccess, this,
-        &TeacherPage::taskDetailsLoaded
-        );
+        NetworkManager::instance(), &NetworkManager::taskDetailsLoadSuccess,
+        this, &TeacherPage::taskDetailsLoaded
+    );
 
     connect(
         ui->taskList, &QListWidget::itemClicked, this,
         &TeacherPage::taskSelected
-        );
+    );
 
     connect(
         ui->addButton, &QPushButton::clicked, this, &TeacherPage::addTaskClicked
-        );
-
-    connect(ui->deleteButton, &QPushButton::clicked, this, &TeacherPage::deleteTaskClicked);
-
-    connect(ui->editButton, &QPushButton::clicked, this, &TeacherPage::editTaskClicked);
+    );
 
     connect(
-        ui->createButton, &QPushButton::clicked, this, &TeacherPage::createTaskClicked
-        );
+        ui->deleteButton, &QPushButton::clicked, this,
+        &TeacherPage::deleteTaskClicked
+    );
 
-    connect(ui->cancelButton, &QPushButton::clicked, this, &TeacherPage::calcelCreatingButton);
+    connect(
+        ui->editButton, &QPushButton::clicked, this,
+        &TeacherPage::editTaskClicked
+    );
 
+    connect(
+        ui->createButton, &QPushButton::clicked, this,
+        &TeacherPage::createTaskClicked
+    );
+
+    connect(
+        ui->cancelButton, &QPushButton::clicked, this,
+        &TeacherPage::calcelCreatingButton
+    );
+
+    connect(
+        NetworkManager::instance(), &NetworkManager::taskCreated, this,
+        &TeacherPage::taskCreated, Qt::UniqueConnection
+    );
+
+    connect(
+        NetworkManager::instance(), &NetworkManager::taskDeleted, this,
+        &TeacherPage::taskDeleted, Qt::UniqueConnection
+    );
+
+    connect(
+        NetworkManager::instance(), &NetworkManager::taskEdited, this,
+        &TeacherPage::taskEdited, Qt::UniqueConnection
+    );
 }
 
 TeacherPage::~TeacherPage() {
@@ -96,9 +132,10 @@ void TeacherPage::loadTasks() {
     // ui->taskList->clear();
 
     // QVector<Task> tasksList = {
-    //              {1, "Hello World", "Напишите программу, которая выведет 'Hello World'"},
-    //              {2, "Сумма чисел", "На вход поступают 2 числа, найти их сумму"},
-    //              {3, "Перевернуть вектор", "Переверните вектор"}};
+    //              {1, "Hello World", "Напишите программу, которая выведет
+    //              'Hello World'"}, {2, "Сумма чисел", "На вход поступают 2
+    //              числа, найти их сумму"}, {3, "Перевернуть вектор",
+    //              "Переверните вектор"}};
 
     // for (const Task &task : tasksList) {
     //     QString text = "№" + QString::number(task.id) + ". " + task.title;
@@ -125,7 +162,9 @@ void TeacherPage::tasksLoaded(const QJsonObject &response) {
 }
 
 void TeacherPage::taskSelected(QListWidgetItem *taskItem) {
-    if (isCreateMode) return;
+    if (isCreateMode) {
+        return;
+    }
     currentTaskId = taskItem->data(Qt::UserRole).toInt();
     NetworkManager::instance()->loadTaskDetails(currentTaskId);
 }
@@ -136,14 +175,12 @@ void TeacherPage::taskDetailsLoaded(const QJsonObject &details) {
     QString description = details["description"].toString();
     QString difficulty = details["difficulty"].toString();
 
-
     QString text = "№" + QString::number(id) + ". " + title + ".\n";
     text += "Difficulty: " + difficulty + ".\n\n";
     text += description + "\n";
     ui->taskCondition->setText(text);
 
     showTests(details["tests"].toArray());
-
 }
 
 void TeacherPage::showTests(const QJsonArray &tests) {
@@ -167,34 +204,55 @@ void TeacherPage::showTests(const QJsonArray &tests) {
 }
 
 void TeacherPage::addTaskClicked() {
+    ui->nameInput->clear();
+    ui->conditionEdit->clear();
+    ui->testsEdit->clear();
+    ui->difficultyBox->setCurrentIndex(0);
+
+    ui->createButton->setText("Create");
     showCreateMode();
     currentTaskId = -1;
 }
 
-void TeacherPage::deleteTaskClicked(int taskId) {
-
-    // TODO: добавить ошибку если задание не выбрано
-    QMessageBox::StandardButton reply = QMessageBox::question(this, "Deleting", "Are you sure you want to delete this task?", QMessageBox::Yes | QMessageBox::No);
+void TeacherPage::deleteTaskClicked() {
+    if (currentTaskId <= 0) {
+        QMessageBox::warning(this, "Error", "Choose the task to edit");
+    }
+    QMessageBox::StandardButton reply = QMessageBox::question(
+        this, "Deleting", "Are you sure you want to delete this task?",
+        QMessageBox::Yes | QMessageBox::No
+    );
     if (reply == QMessageBox::Yes) {
-        NetworkManager::instance()->deleteTask(taskId);
-        loadTasks();
+        NetworkManager::instance()->deleteTask(currentTaskId);
     }
 }
 
-void TeacherPage::editTaskClicked(int taskId) {
-
-    // TODO: добавить ошибку если задание не выбрано
-    currentTaskId = taskId;
-    NetworkManager::instance()->loadTaskDetails(taskId);
+void TeacherPage::editTaskClicked() {
+    if (currentTaskId < 0) {
+        QMessageBox::warning(this, "Error", "Choose the task to edit");
+    }
+    NetworkManager::instance()->loadTaskDetails(currentTaskId);
     showCreateMode();
-    connect(NetworkManager::instance(), &NetworkManager::taskDetailsLoadSuccess, this, &TeacherPage::fillEditForm, Qt::SingleShotConnection);
+    ui->createButton->setText("Save");
+    connect(
+        NetworkManager::instance(), &NetworkManager::taskDetailsLoadSuccess,
+        this, &TeacherPage::fillEditForm, Qt::SingleShotConnection
+    );
 }
 
 void TeacherPage::fillEditForm(const QJsonObject &details) {
     ui->nameInput->setText(details["title"].toString());
     ui->difficultyBox->setCurrentText(details["difficulty"].toString());
-    ui->conditionEdit->setText((details["   description"].toString()));
-    ui->tests->setText(details["tests"].toString());
+    ui->conditionEdit->setText((details["description"].toString()));
+
+    QJsonArray testsArray = details["tests"].toArray();
+    QString testsText;
+    for (const auto &test : testsArray) {
+        QJsonObject t = test.toObject();
+        testsText += t["input"].toString() + " : " +
+                     t["expected_output"].toString() + "\n";
+    }
+    ui->tests->setPlainText(testsText);
 }
 
 void TeacherPage::createTaskClicked() {
@@ -205,7 +263,9 @@ void TeacherPage::createTaskClicked() {
     QJsonArray tests = parseTests(testsText);
 
     if (taskName.isEmpty() || condition.isEmpty()) {
-        QMessageBox::warning(this, "Error", "Input the task name and condition");
+        QMessageBox::warning(
+            this, "Error", "Input the task name and condition"
+        );
         return;
     }
 
@@ -220,9 +280,6 @@ void TeacherPage::createTaskClicked() {
     } else {
         NetworkManager::instance()->editTask(currentTaskId, task);
     }
-
-    showViewMode();
-    loadTasks();
 }
 
 QJsonArray TeacherPage::parseTests(const QString &testsText) {
@@ -249,4 +306,23 @@ QJsonArray TeacherPage::parseTests(const QString &testsText) {
 
 void TeacherPage::calcelCreatingButton() {
     showViewMode();
+}
+
+void TeacherPage::taskCreated(int taskId) {
+    loadTasks();
+    showViewMode();
+    NetworkManager::instance()->loadTaskDetails(taskId);
+}
+
+void TeacherPage::taskDeleted() {
+    currentTaskId = -1;
+    loadTasks();
+    showViewMode();
+    ui->taskList->clearSelection();
+}
+
+void TeacherPage::taskEdited() {
+    loadTasks();
+    showViewMode();
+    NetworkManager::instance()->loadTaskDetails(currentTaskId);
 }

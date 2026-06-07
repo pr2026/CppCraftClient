@@ -54,19 +54,18 @@ TaskPage::TaskPage(QWidget *parent) : QWidget(parent), ui(new Ui::TaskPage) {
     ui->submitButton->setStyleSheet("background-color: #f4dede;");
     ui->clearButton->setStyleSheet("background-color: #f4dede;");
 
-    loadTasks();
+    // loadTasks();
 
     connect(
         NetworkManager::instance(), &NetworkManager::tasksLoadSuccess, this,
         &TaskPage::tasksLoaded
     );
     connect(
-        NetworkManager::instance(), &NetworkManager::taskDetailsLoadSuccess, this,
-        &TaskPage::taskDetailsLoaded
+        NetworkManager::instance(), &NetworkManager::taskDetailsLoadSuccess,
+        this, &TaskPage::taskDetailsLoaded
     );
     connect(
-        ui->tasksList, &QListWidget::itemClicked, this,
-        &TaskPage::taskSelected
+        ui->tasksList, &QListWidget::itemClicked, this, &TaskPage::taskSelected
     );
     connect(
         ui->clearButton, &QPushButton::clicked, this, &TaskPage::clearClicked
@@ -74,8 +73,14 @@ TaskPage::TaskPage(QWidget *parent) : QWidget(parent), ui(new Ui::TaskPage) {
     connect(
         ui->submitButton, &QPushButton::clicked, this, &TaskPage::submitClicked
     );
-    connect(NetworkManager::instance(), &NetworkManager::solutionResult, this, &TaskPage::solutionResult);
-    connect(NetworkManager::instance(), &NetworkManager::solutionError, this, &TaskPage::solutionError);
+    connect(
+        NetworkManager::instance(), &NetworkManager::solutionResult, this,
+        &TaskPage::solutionResult
+    );
+    connect(
+        NetworkManager::instance(), &NetworkManager::solutionError, this,
+        &TaskPage::solutionError
+    );
 }
 
 TaskPage::~TaskPage() {
@@ -125,9 +130,10 @@ void TaskPage::codeEditorSetter(QsciLexerCPP *lexer) {
 void TaskPage::loadTasks() {
     // // sample tasks
     // tasksList = {
-    //              {1, "Hello World", "Напишите программу, которая выведет 'Hello World'"},
-    //              {2, "Сумма чисел", "На вход поступают 2 числа, найти их сумму"},
-    //              {3, "Перевернуть вектор", "Переверните вектор"}};
+    //              {1, "Hello World", "Напишите программу, которая выведет
+    //              'Hello World'"}, {2, "Сумма чисел", "На вход поступают 2
+    //              числа, найти их сумму"}, {3, "Перевернуть вектор",
+    //              "Переверните вектор"}};
 
     // for (const Task &task : tasksList) {
     //     QString text = "№" + QString::number(task.id) + ". " + task.title;
@@ -200,7 +206,9 @@ void TaskPage::solutionResult(const QJsonObject &result) {
             QMessageBox::information(this, "Completed", "All tests passed");
             codeEditor->clear();
         } else {
-            QString passedTestsText = "Tests passed: " + QString::number(passedTests) + "/" + QString::number(totalTests) + ".\n";
+            QString passedTestsText =
+                "Tests passed: " + QString::number(passedTests) + "/" +
+                QString::number(totalTests) + ".\n";
             QMessageBox::information(this, "Some mistakes", passedTestsText);
         }
     } else {

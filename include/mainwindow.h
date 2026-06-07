@@ -29,9 +29,9 @@ private:
     TaskPage *taskPage;
     TeacherPage *teacherPage;
 
-
 private slots:
-    void onLoginSuccess(const QString &role);
+    void onLoginSuccess(const QString &userName, const QString &role);
+    void onRegistrationSuccess(const QString &userName, const QString &role);
 };
 
 #endif  // MAINWINDOW_H

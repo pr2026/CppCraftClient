@@ -22,14 +22,16 @@ LoginPage::LoginPage(QWidget *parent) : QWidget(parent), ui(new Ui::LoginPage) {
     QHBoxLayout *switchLayout = new QHBoxLayout;
     switchLayout->setAlignment(Qt::AlignCenter);
     switchLayout->setSpacing(20);
-    QString btnStyle = "QPushButton {"
+    QString btnStyle =
+        "QPushButton {"
         "    min-width: 80px;"
         "    max-width: 80px;"
         "    min-height: 30px;"
         "    max-height: 30px;"
         "}";
 
-    QString btnStyleChosen = "QPushButton {"
+    QString btnStyleChosen =
+        "QPushButton {"
         "    min-width: 80px;"
         "    max-width: 80px;"
         "    min-height: 30px;"
@@ -56,7 +58,8 @@ LoginPage::LoginPage(QWidget *parent) : QWidget(parent), ui(new Ui::LoginPage) {
     ui->loginPage->setMinimumSize(300, 250);
     ui->loginPage->setMaximumSize(300, 250);
 
-    QVBoxLayout *loginLayout = qobject_cast<QVBoxLayout*>(ui->loginPage->layout());
+    QVBoxLayout *loginLayout =
+        qobject_cast<QVBoxLayout *>(ui->loginPage->layout());
     if (loginLayout) {
         loginLayout->setAlignment(Qt::AlignCenter);
         loginLayout->setSpacing(8);
@@ -65,7 +68,8 @@ LoginPage::LoginPage(QWidget *parent) : QWidget(parent), ui(new Ui::LoginPage) {
     ui->registrationPage->setMinimumSize(300, 250);
     ui->registrationPage->setMaximumSize(300, 250);
 
-    QVBoxLayout *regLayout = qobject_cast<QVBoxLayout*>(ui->registrationPage->layout());
+    QVBoxLayout *regLayout =
+        qobject_cast<QVBoxLayout *>(ui->registrationPage->layout());
     if (regLayout) {
         regLayout->setAlignment(Qt::AlignCenter);
         regLayout->setSpacing(8);
@@ -85,10 +89,16 @@ LoginPage::LoginPage(QWidget *parent) : QWidget(parent), ui(new Ui::LoginPage) {
     });
 
     connect(
-        ui->clearButtonLogin, &QPushButton::clicked, this, &LoginPage::clearClicked
+        ui->clearButtonLogin, &QPushButton::clicked, this,
+        &LoginPage::clearClicked
     );
-    connect(ui->clearButtonRegistration, &QPushButton::clicked, this, &LoginPage::clearClicked);
-    connect(ui->loginButton, &QPushButton::clicked, this, &LoginPage::okClicked);
+    connect(
+        ui->clearButtonRegistration, &QPushButton::clicked, this,
+        &LoginPage::clearClicked
+    );
+    connect(
+        ui->loginButton, &QPushButton::clicked, this, &LoginPage::okClicked
+    );
 
     connect(
         ui->registrationButton, &QPushButton::clicked, this,
@@ -109,7 +119,7 @@ LoginPage::LoginPage(QWidget *parent) : QWidget(parent), ui(new Ui::LoginPage) {
     ui->verticalWidgetRegistration->setStyleSheet(
         "background-color: rgb(248, 199, 199);"
         "border-radius: 5px;"
-        );
+    );
 
     ui->studentButton->setStyleSheet(
         "QRadioButton::indicator {"
@@ -126,7 +136,7 @@ LoginPage::LoginPage(QWidget *parent) : QWidget(parent), ui(new Ui::LoginPage) {
         "    border: 1px solid white;"
         "    background-color: #999;"
         "}"
-        );
+    );
 
     ui->teacherButton->setStyleSheet(ui->studentButton->styleSheet());
 }
@@ -139,7 +149,7 @@ void LoginPage::clearClicked() {
     if (ui->stackedWidget->currentIndex() == 0) {
         ui->loginInputLogin->clear();
         ui->passwordInputLogin->clear();
-    } else  if (ui->stackedWidget->currentIndex() == 1) {
+    } else if (ui->stackedWidget->currentIndex() == 1) {
         ui->loginInputRegistration->clear();
         ui->passwordInputRegistration->clear();
     }
@@ -158,7 +168,8 @@ void LoginPage::okClicked() {
 }
 
 void LoginPage::registrationClicked() {
-    // emit NetworkManager::instance()->registrationSuccess();  // for debugging!!
+    // emit NetworkManager::instance()->registrationSuccess();  // for
+    // debugging!!
 
     QString login = ui->loginInputRegistration->text();
     QString password = ui->passwordInputRegistration->text();
@@ -172,5 +183,6 @@ void LoginPage::registrationClicked() {
     if (login == "" || password == "") {
         QMessageBox::warning(this, "Ошибка", "Неверный логин или пароль");
     }
+
     NetworkManager::instance()->registration(login, password, role);
 }

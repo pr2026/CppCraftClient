@@ -1,10 +1,13 @@
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
 #include <QDebug>
+#include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
+
+    NetworkManager::instance();
+
     this->setStyleSheet("background-color: white;");
     showMaximized();
 
@@ -20,20 +23,18 @@ MainWindow::MainWindow(QWidget *parent)
     // ui->stackedWidget->setCurrentWidget(taskPage);
 
     // для отладки teacherPage
-    ui->stackedWidget->setCurrentWidget(teacherPage);
+    // ui->stackedWidget->setCurrentWidget(teacherPage);
 
-    // ui->stackedWidget->setCurrentWidget(loginPage);
+    ui->stackedWidget->setCurrentWidget(loginPage);
 
     connect(
-        NetworkManager::instance(), &NetworkManager::loginSuccess, this, &MainWindow::onLoginSuccess);
+        NetworkManager::instance(), &NetworkManager::loginSuccess, this,
+        &MainWindow::onLoginSuccess
+    );
 
     connect(
         NetworkManager::instance(), &NetworkManager::registrationSuccess, this,
-        [=]() {
-            // if (role )
-            ui->stackedWidget->setCurrentWidget(taskPage);
-        taskPage->loadTasks();
-        }
+        &MainWindow::onRegistrationSuccess
     );
 
     connect(
@@ -48,11 +49,28 @@ MainWindow::~MainWindow() {
     delete ui;
 }
 
-void MainWindow::onLoginSuccess(const QString &role) {
+void MainWindow::onLoginSuccess(const QString &userName, const QString &role) {
+    NetworkManager::instance()->setCurrentUser(userName, role);
+
     if (role == "student") {
         ui->stackedWidget->setCurrentWidget(taskPage);
         taskPage->loadTasks();
-    } else if (role == "student") {
+    } else if (role == "teacher") {
+        ui->stackedWidget->setCurrentWidget(teacherPage);
+        teacherPage->loadTasks();
+    }
+}
+
+void MainWindow::onRegistrationSuccess(
+    const QString &userName,
+    const QString &role
+) {
+    NetworkManager::instance()->setCurrentUser(userName, role);
+
+    if (role == "student") {
+        ui->stackedWidget->setCurrentWidget(taskPage);
+        taskPage->loadTasks();
+    } else if (role == "teacher") {
         ui->stackedWidget->setCurrentWidget(teacherPage);
         teacherPage->loadTasks();
     }

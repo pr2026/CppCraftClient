@@ -1,13 +1,13 @@
 #ifndef TEACHERPAGE_H
 #define TEACHERPAGE_H
 
+#include <QJsonArray>
+#include <QJsonObject>
+#include <QListWidget>
+#include <QMessageBox>
+#include <QWidget>
 #include "networkmanager.h"
 #include "task.h"
-#include <QWidget>
-#include <QListWidget>
-#include <QJsonObject>
-#include <QJsonArray>
-#include <QMessageBox>
 
 namespace Ui {
 class TeacherPage;
@@ -29,20 +29,24 @@ private:
     void showViewMode();
     void showCreateMode();
     void fillEditForm(const QJsonObject &details);
+    void clearTaskForm();
     QJsonArray parseTests(const QString &testsText);
-    void showTests(const QJsonArray& tests);
+    void showTests(const QJsonArray &tests);
 
 private slots:
-    void tasksLoaded(const QJsonObject& tasks);
+    void tasksLoaded(const QJsonObject &tasks);
     void taskDetailsLoaded(const QJsonObject &details);
     void taskSelected(QListWidgetItem *taskItem);
 
     void addTaskClicked();
-    void editTaskClicked(int taskId);
-    void deleteTaskClicked(int taskId);
+    void editTaskClicked();
+    void deleteTaskClicked();
     void createTaskClicked();
     void calcelCreatingButton();
 
+    void taskCreated(int taskId);
+    void taskEdited();
+    void taskDeleted();
 };
 
 #endif  // TEACHERPAGE_H

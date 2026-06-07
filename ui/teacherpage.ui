@@ -42,10 +42,24 @@
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_15">
           <item>
+           <widget class="QLabel" name="condtionLabel">
+            <property name="text">
+             <string>Task Condition</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QTextBrowser" name="taskCondition"/>
           </item>
           <item>
-           <widget class="QTextBrowser" name="tests"/>
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Tests</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTextBrowser" name="testsLabel_2"/>
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout">
@@ -136,7 +150,7 @@
              </font>
             </property>
             <property name="text">
-             <string>Condition</string>
+             <string>Task Condition</string>
             </property>
            </widget>
           </item>
@@ -152,6 +166,19 @@
             </property>
             <property name="text">
              <string>Tests</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="testsFormatHint">
+            <property name="font">
+             <font>
+              <family>Century Gothic</family>
+              <pointsize>8</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Enter the tests either in JSON format or in he &quot;input : output&quot; format</string>
             </property>
            </widget>
           </item>

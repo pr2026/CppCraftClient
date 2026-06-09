@@ -24,6 +24,16 @@ TaskPage::TaskPage(QWidget *parent) : QWidget(parent), ui(new Ui::TaskPage) {
     ui->taskCondition->setFont(font);
     ui->clearButton->setFont(font);
     ui->submitButton->setFont(font);
+    ui->statisticsButton->setFont(font);
+
+    QString buttonStyle =
+        "QPushButton {"
+        "    min-height: 35px;"
+        "    max-height: 35px;"
+        "    background-color: rgb(254,224,224);"
+        "}";
+
+    ui->statisticsButton->setStyleSheet(buttonStyle);
 
     ui->tasksList->setStyleSheet(
         "QListWidget::item:selected {"
@@ -51,10 +61,8 @@ TaskPage::TaskPage(QWidget *parent) : QWidget(parent), ui(new Ui::TaskPage) {
 
     ui->taskCondition->setStyleSheet("background-color: #f4eee8;");
     ui->tasksList->setStyleSheet("background-color: #f4eee8;");
-    ui->submitButton->setStyleSheet("background-color: #f4dede;");
-    ui->clearButton->setStyleSheet("background-color: #f4dede;");
-
-    // loadTasks();
+    ui->submitButton->setStyleSheet("background-color: rgb(254,224,224);");
+    ui->clearButton->setStyleSheet("background-color: rgb(254,224,224);");
 
     connect(
         NetworkManager::instance(), &NetworkManager::tasksLoadSuccess, this,

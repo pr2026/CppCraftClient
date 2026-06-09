@@ -19,15 +19,26 @@ TeacherPage::TeacherPage(QWidget *parent)
     ui->taskList->setGridSize(QSize(200, 35));
 
     QFont font;
-    font.setFamily("Consolas");
+    font.setFamily("Century Gothic");
     font.setPointSize(10);
+
     ui->taskList->setFont(font);
-    ui->taskCondition->setFont(font);
+
     ui->addButton->setFont(font);
     ui->editButton->setFont(font);
     ui->deleteButton->setFont(font);
     ui->createButton->setFont(font);
     ui->cancelButton->setFont(font);
+
+    ui->nameLabel->setFont(font);
+    ui->testsLabel->setFont(font);
+    ui->difficultyLabe->setFont(font);
+    ui->conditionLabel->setFont(font);
+
+    font.setPointSize(9);
+    ui->tests->setFont(font);
+    ui->taskCondition->setFont(font);
+    ui->nameInput->setFont(font);
 
     ui->taskList->setStyleSheet(
         "QListWidget::item:selected {"
@@ -46,8 +57,8 @@ TeacherPage::TeacherPage(QWidget *parent)
 
     QString buttonStyle =
         "QPushButton {"
-        "    min-height: 25px;"
-        "    max-height: 25px;"
+        "    min-height: 30px;"
+        "    max-height: 30px;"
         "    background-color: rgb(254,224,224);"
         "}";
 

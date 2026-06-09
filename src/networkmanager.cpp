@@ -233,10 +233,10 @@ void NetworkManager::sendRequest(
 ) {
     QUrl url(baseUrl + urlEnd);
 
-    // qDebug() << "----- ОТПРАВКА ЗАПРОСА -----";
-    // qDebug() << "Тип:" << method;
-    // qDebug() << "URL:" << url.toString();
-    // qDebug() << "Данные:" << QJsonDocument(data).toJson();
+    qDebug() << "----- ОТПРАВКА ЗАПРОСА -----";
+    qDebug() << "Тип:" << method;
+    qDebug() << "URL:" << url.toString();
+    qDebug() << "Данные:" << QJsonDocument(data).toJson();
 
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");

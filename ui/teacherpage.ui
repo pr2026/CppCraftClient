@@ -54,203 +54,195 @@
      </widget>
      <widget class="QStackedWidget" name="rightWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="viewTaskPage">
-       <layout class="QVBoxLayout" name="verticalLayout_18">
+       <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_15">
+         <widget class="QLabel" name="conditionLabelView">
+          <property name="font">
+           <font>
+            <family>Century Gothic</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Task Condition</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTextBrowser" name="taskCondition"/>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_2">
+          <property name="font">
+           <font>
+            <family>Century Gothic</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Tests</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTextBrowser" name="tests">
+          <property name="font">
+           <font>
+            <family>Century Gothic</family>
+           </font>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
-           <widget class="QLabel" name="conditionLabelView">
-            <property name="font">
-             <font>
-              <family>Century Gothic</family>
-              <pointsize>10</pointsize>
-             </font>
-            </property>
+           <widget class="QPushButton" name="deleteButton">
             <property name="text">
-             <string>Task Condition</string>
+             <string>Delete</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QTextBrowser" name="taskCondition"/>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_2">
-            <property name="font">
-             <font>
-              <family>Century Gothic</family>
-              <pointsize>10</pointsize>
-             </font>
-            </property>
+           <widget class="QPushButton" name="editButton">
             <property name="text">
-             <string>Tests</string>
+             <string>Edit</string>
             </property>
            </widget>
-          </item>
-          <item>
-           <widget class="QTextBrowser" name="tests">
-            <property name="font">
-             <font>
-              <family>Century Gothic</family>
-             </font>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout">
-            <item>
-             <widget class="QPushButton" name="deleteButton">
-              <property name="text">
-               <string>Delete</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="editButton">
-              <property name="text">
-               <string>Edit</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
           </item>
          </layout>
         </item>
        </layout>
       </widget>
       <widget class="QWidget" name="createTaskPage">
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_17">
-          <item>
-           <layout class="QFormLayout" name="formLayout">
-            <item row="0" column="0">
-             <widget class="QLabel" name="nameLabel">
-              <property name="font">
-               <font>
-                <family>Century Gothic</family>
-               </font>
-              </property>
-              <property name="text">
-               <string>Name</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="difficultyLabe">
-              <property name="font">
-               <font>
-                <family>Century Gothic</family>
-               </font>
-              </property>
-              <property name="text">
-               <string>Difficulty</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QLineEdit" name="nameInput"/>
-            </item>
-            <item row="1" column="1">
-             <widget class="QComboBox" name="difficultyBox">
-              <property name="font">
-               <font>
-                <family>Century Gothic</family>
-               </font>
-              </property>
-              <item>
-               <property name="text">
-                <string>Easy</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Medium</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Hard</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <widget class="QLabel" name="conditionLabel">
+         <layout class="QFormLayout" name="formLayout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="nameLabel">
             <property name="font">
              <font>
               <family>Century Gothic</family>
              </font>
             </property>
             <property name="text">
-             <string>Task Condition</string>
+             <string>Name</string>
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QTextEdit" name="conditionEdit">
-            <property name="font">
-             <font>
-              <family>Century Gothic</family>
-             </font>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="testsLabel">
+          <item row="1" column="0">
+           <widget class="QLabel" name="difficultyLabe">
             <property name="font">
              <font>
               <family>Century Gothic</family>
              </font>
             </property>
             <property name="text">
-             <string>Tests</string>
+             <string>Difficulty</string>
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QLabel" name="testsFormatHint">
-            <property name="font">
-             <font>
-              <family>Century Gothic</family>
-              <pointsize>8</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Enter the tests either in JSON format or in he &quot;input : output&quot; format</string>
-            </property>
-           </widget>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="nameInput"/>
           </item>
-          <item>
-           <widget class="QTextEdit" name="testsEdit">
+          <item row="1" column="1">
+           <widget class="QComboBox" name="difficultyBox">
             <property name="font">
              <font>
               <family>Century Gothic</family>
              </font>
             </property>
-           </widget>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="createButtons">
             <item>
-             <widget class="QPushButton" name="cancelButton">
-              <property name="text">
-               <string>Cancel</string>
-              </property>
-             </widget>
+             <property name="text">
+              <string>Easy</string>
+             </property>
             </item>
             <item>
-             <widget class="QPushButton" name="createButton">
-              <property name="text">
-               <string>Create</string>
-              </property>
-             </widget>
+             <property name="text">
+              <string>Medium</string>
+             </property>
             </item>
-           </layout>
+            <item>
+             <property name="text">
+              <string>Hard</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QLabel" name="conditionLabel">
+          <property name="font">
+           <font>
+            <family>Century Gothic</family>
+           </font>
+          </property>
+          <property name="text">
+           <string>Task Condition</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTextEdit" name="conditionEdit">
+          <property name="font">
+           <font>
+            <family>Century Gothic</family>
+           </font>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="testsLabel">
+          <property name="font">
+           <font>
+            <family>Century Gothic</family>
+           </font>
+          </property>
+          <property name="text">
+           <string>Tests</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="testsFormatHint">
+          <property name="font">
+           <font>
+            <family>Century Gothic</family>
+            <pointsize>8</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Enter the tests either in JSON format or in he &quot;input : output&quot; format</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTextEdit" name="testsEdit">
+          <property name="font">
+           <font>
+            <family>Century Gothic</family>
+           </font>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="createButtons">
+          <item>
+           <widget class="QPushButton" name="cancelButton">
+            <property name="text">
+             <string>Cancel</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="createButton">
+            <property name="text">
+             <string>Create</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>

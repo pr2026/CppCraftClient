@@ -21,12 +21,12 @@ MainWindow::MainWindow(QWidget *parent)
     ui->stackedWidget->addWidget(teacherPage);
 
     // для отладки taskPage!! потом поменять на loginPage!!
-    ui->stackedWidget->setCurrentWidget(taskPage);
+    // ui->stackedWidget->setCurrentWidget(taskPage);
 
     // для отладки teacherPage
     // ui->stackedWidget->setCurrentWidget(teacherPage);
 
-    // ui->stackedWidget->setCurrentWidget(loginPage);
+    ui->stackedWidget->setCurrentWidget(loginPage);
 
     QToolBar *toolBar = new QToolBar(this);
     addToolBar(toolBar);

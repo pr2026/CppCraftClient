@@ -219,7 +219,7 @@ void NetworkManager::createTask(const QJsonObject &task) {
                 int taskId = jsonObj["task_id"].toInt();
                 emit taskCreated(taskId);
             } else {
-                emit error("Failed to edit task: " + reply->errorString());
+                emit error("Failed to create task: " + reply->errorString());
             }
             reply->deleteLater();
         },

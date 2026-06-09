@@ -14,6 +14,7 @@ class LoginPage : public QWidget {
 public:
     explicit LoginPage(QWidget *parent = nullptr);
     ~LoginPage();
+    void clearFields();
 
 private:
     Ui::LoginPage *ui;
@@ -22,9 +23,6 @@ private slots:
     void clearClicked();
     void okClicked();
     void registrationClicked();
-
-    // signals:
-    //     void loginSuccessful();
 };
 
 #endif  // LOGINPAGE_H

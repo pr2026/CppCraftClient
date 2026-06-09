@@ -351,6 +351,12 @@
          <layout class="QHBoxLayout" name="roleButtons">
           <item>
            <widget class="QRadioButton" name="studentButton">
+            <property name="font">
+             <font>
+              <family>Century Gothic</family>
+              <pointsize>8</pointsize>
+             </font>
+            </property>
             <property name="text">
              <string>Student</string>
             </property>
@@ -361,6 +367,12 @@
           </item>
           <item>
            <widget class="QRadioButton" name="teacherButton">
+            <property name="font">
+             <font>
+              <family>Century Gothic</family>
+              <pointsize>8</pointsize>
+             </font>
+            </property>
             <property name="text">
              <string>Teacher</string>
             </property>
@@ -414,6 +426,11 @@
               <width>16777215</width>
               <height>30</height>
              </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Century Gothic</family>
+             </font>
             </property>
             <property name="styleSheet">
              <string notr="true">background-color: rgb(255, 255, 255)</string>

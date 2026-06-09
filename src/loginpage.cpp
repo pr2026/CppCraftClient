@@ -186,3 +186,11 @@ void LoginPage::registrationClicked() {
 
     NetworkManager::instance()->registration(login, password, role);
 }
+
+void LoginPage::clearFields()
+{
+    ui->loginInputLogin->clear();
+    ui->passwordInputLogin->clear();
+    ui->loginInputRegistration->clear();
+    ui->passwordInputRegistration->clear();
+}

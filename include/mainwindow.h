@@ -28,10 +28,17 @@ private:
     LoginPage *loginPage;
     TaskPage *taskPage;
     TeacherPage *teacherPage;
+    QAction* logoutAction;
 
 private slots:
-    void onLoginSuccess(const QString &userName, const QString &role, int userId);
-    void onRegistrationSuccess(const QString &userName, const QString &role, int userId);
+    void
+    onLoginSuccess(const QString &userName, const QString &role, int userId);
+    void onRegistrationSuccess(
+        const QString &userName,
+        const QString &role,
+        int userId
+    );
+    void onLogoutClicked();
 };
 
 #endif  // MAINWINDOW_H

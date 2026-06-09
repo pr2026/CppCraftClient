@@ -25,13 +25,19 @@ private:
     Ui::TeacherPage *ui;
     int currentTaskId = -1;
     bool isCreateMode = false;
+    bool isStatisticsMode = false;
 
     void showViewMode();
     void showCreateMode();
+    void showStatisticsMode();
+
     void fillEditForm(const QJsonObject &details);
-    void clearTaskForm();
+    // void clearTaskForm();
     QJsonArray parseTests(const QString &testsText);
     void showTests(const QJsonArray &tests);
+
+    // TODO: УДАЛИТЬ
+    QJsonObject createMockStatistics();
 
 private slots:
     void tasksLoaded(const QJsonObject &tasks);
@@ -39,6 +45,7 @@ private slots:
     void taskSelected(QListWidgetItem *taskItem);
 
     void addTaskClicked();
+    void statisticsClicked();
     void editTaskClicked();
     void deleteTaskClicked();
     void createTaskClicked();
@@ -47,6 +54,7 @@ private slots:
     void taskCreated(int taskId);
     void taskEdited();
     void taskDeleted();
+    void statisticsLoaded(const QJsonObject &statistics);
 };
 
 #endif  // TEACHERPAGE_H

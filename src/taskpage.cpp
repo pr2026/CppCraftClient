@@ -40,7 +40,7 @@ TaskPage::TaskPage(QWidget *parent) : QWidget(parent), ui(new Ui::TaskPage) {
         "    font-weight: regular;"
         "    background-color: #f4eee8;"
         "}"
-        );
+    );
 
     QString buttonStyle =
         "QPushButton {"
@@ -67,9 +67,9 @@ TaskPage::TaskPage(QWidget *parent) : QWidget(parent), ui(new Ui::TaskPage) {
         "QListWidget:focus {"
         "    outline: none;"
         "}"
-        );
+    );
 
-    loadTasks();
+    // loadTasks();
 
     codeEditor = new QsciScintilla(this);
     QsciLexerCPP *lexer = new QsciLexerCPP(this);
@@ -105,7 +105,9 @@ TaskPage::TaskPage(QWidget *parent) : QWidget(parent), ui(new Ui::TaskPage) {
     connect(
         ui->submitButton, &QPushButton::clicked, this, &TaskPage::submitClicked
     );
-    connect(ui->statisticsButton, &QPushButton::clicked, this, &TaskPage::switchMode);
+    connect(
+        ui->statisticsButton, &QPushButton::clicked, this, &TaskPage::switchMode
+    );
 
     connect(
         NetworkManager::instance(), &NetworkManager::solutionResult, this,
@@ -118,11 +120,13 @@ TaskPage::TaskPage(QWidget *parent) : QWidget(parent), ui(new Ui::TaskPage) {
 
     // TODO: ПОМЕНЯТЬ
 
-    // connect(NetworkManager::instance(), &NetworkManager::studentStatisticsLoaded, this, &TaskPage::statisticsLoaded);
-    QTimer::singleShot(100, this, [this]() {
-        QJsonObject mockStats = createMockStatistics();
-        statisticsLoaded(mockStats);
-    });
+    connect(NetworkManager::instance(),
+    &NetworkManager::studentStatisticsLoaded, this,
+    &TaskPage::statisticsLoaded);
+    // QTimer::singleShot(100, this, [this]() {
+    //     QJsonObject mockStats = createMockStatistics();
+    //     statisticsLoaded(mockStats);
+    // });
 }
 
 TaskPage::~TaskPage() {
@@ -171,17 +175,17 @@ void TaskPage::codeEditorSetter(QsciLexerCPP *lexer) {
 
 void TaskPage::loadTasks() {
     // sample tasks
-    tasksList = {
-                 {1, "Hello World", "Напишите программу, которая выведет'Hello World'"},
-        {2, "Сумма чисел", "На вход поступают 2 числа, найти их сумму"},
-        {3, "Перевернуть вектор", "Переверните вектор"}};
+    // tasksList = {
+    //     {1, "Hello World", "Напишите программу, которая выведет'Hello World'"},
+    //     {2, "Сумма чисел", "На вход поступают 2 числа, найти их сумму"},
+    //     {3, "Перевернуть вектор", "Переверните вектор"}};
 
-    for (const Task &task : tasksList) {
-        QString text = "№" + QString::number(task.id) + ". " + task.title;
-        ui->tasksList->addItem(text);
-    }
+    // for (const Task &task : tasksList) {
+    //     QString text = "№" + QString::number(task.id) + ". " + task.title;
+    //     ui->tasksList->addItem(text);
+    // }
 
-    // NetworkManager::instance()->loadTasks();
+    NetworkManager::instance()->loadTasks();
 }
 
 void TaskPage::tasksLoaded(const QJsonObject &response) {
@@ -290,16 +294,19 @@ void TaskPage::showCodingMode() {
     NetworkManager::instance()->loadTasks();
 }
 
-void TaskPage::statisticsLoaded(const QJsonObject& statistics) {
-
+void TaskPage::statisticsLoaded(const QJsonObject &statistics) {
     int totalAttemps = statistics["total_attempts"].toInt();
     int successfulAttempts = statistics["solved_tasks"].toInt();
     double successRate = statistics["success_rate"].toDouble();
 
-    QString generalText = QString("Total attempts: %1\n"
-                                  "Solved Tasks: %2\n"
+    QString generalText = QString(
+                              "Total attempts: %1\n"
+                              "Solved Tasks: %2\n"
                               "Success percentage: %3\%\n"
-                                  ).arg(totalAttemps).arg(successfulAttempts).arg(successRate, 0, 'f', 1);
+    )
+                              .arg(totalAttemps)
+                              .arg(successfulAttempts)
+                              .arg(successRate, 0, 'f', 1);
 
     ui->generalStatistics->setText(generalText);
 
@@ -307,36 +314,46 @@ void TaskPage::statisticsLoaded(const QJsonObject& statistics) {
 
     ui->detailsTable->setRowCount(tasks.size());
     ui->detailsTable->setColumnCount(5);
-    ui->detailsTable->setHorizontalHeaderLabels({
-        "ID", "Task", " Max successful tests ", "Attempts amount", "Status"
-    });
+    ui->detailsTable->setHorizontalHeaderLabels(
+        {"ID", "Task", " Max successful tests ", "Attempts amount", "Status"}
+    );
 
     for (int i = 0; i < tasks.size(); i++) {
         QJsonObject task = tasks[i].toObject();
 
         int taskId = task["task_id"].toInt();
-        ui->detailsTable->setItem(i, 0, new QTableWidgetItem(QString::number(taskId)));
-        ui->detailsTable->item(i, 0)->setFont(QFont("Century Gothic", 10, QFont::Bold));
+        ui->detailsTable->setItem(
+            i, 0, new QTableWidgetItem(QString::number(taskId))
+        );
+        ui->detailsTable->item(i, 0)->setFont(
+            QFont("Century Gothic", 10, QFont::Bold)
+        );
 
-        ui->detailsTable->setItem(i, 1, new QTableWidgetItem(task["task_title"].toString()));
+        ui->detailsTable->setItem(
+            i, 1, new QTableWidgetItem(task["task_title"].toString())
+        );
 
         int bestResult = task["best_result"].toInt();
-        ui->detailsTable->setItem(i, 2, new QTableWidgetItem(QString::number(bestResult)));
+        ui->detailsTable->setItem(
+            i, 2, new QTableWidgetItem(QString::number(bestResult))
+        );
 
         int totalAttemps = task["attempts"].toInt();
-        ui->detailsTable->setItem(i, 3, new QTableWidgetItem(QString::number(totalAttemps)));
-
+        ui->detailsTable->setItem(
+            i, 3, new QTableWidgetItem(QString::number(totalAttemps))
+        );
 
         bool solved = task["is_solved"].toBool();
-        ui->detailsTable->setItem(i, 4, new QTableWidgetItem(solved ? "✅" : "❌"));
+        ui->detailsTable->setItem(
+            i, 4, new QTableWidgetItem(solved ? "✅" : "❌")
+        );
     }
 
     ui->detailsTable->resizeColumnsToContents();
 }
 
 // TODO: УДАЛИТЬ
-QJsonObject TaskPage::createMockStatistics()
-{
+QJsonObject TaskPage::createMockStatistics() {
     QJsonObject stats;
     stats["total_attempts"] = 15;
     stats["solved_tasks"] = 8;

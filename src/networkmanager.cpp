@@ -40,9 +40,11 @@ void NetworkManager::login(const QString &username, const QString &password) {
             if (reply->error() == QNetworkReply::NoError) {
                 QJsonObject jsonObj =
                     QJsonDocument::fromJson(reply->readAll()).object();
+                // qDebug() << "Login response:" << reply->readAll();
                 QString role = jsonObj["role"].toString();
                 QString userName = jsonObj["username"].toString();
-                int userId = jsonObj["user_id"].toInt();
+                int userId = jsonObj["userId"].toInt();
+                qDebug() << userId;
                 emit loginSuccess(userName, role, userId);
             } else {
                 emit error("Cannot login: " + reply->errorString());
@@ -67,11 +69,12 @@ void NetworkManager::registration(
         "/registration", registrationData,
         [this](QNetworkReply *reply) {
             if (reply->error() == QNetworkReply::NoError) {
+                // qDebug() << "Login response:" << reply->readAll();
                 QJsonObject jsonObj =
                     QJsonDocument::fromJson(reply->readAll()).object();
                 QString userRole = jsonObj["role"].toString();
                 QString userName = jsonObj["username"].toString();
-                int userId = jsonObj["user_id"].toInt();
+                int userId = jsonObj["userId"].toInt();
                 emit registrationSuccess(userName, userRole, userId);
             } else {
                 emit error("Failed to registrate: " + reply->errorString());
@@ -109,7 +112,9 @@ void NetworkManager::loadTaskDetails(int taskId) {
                     QJsonDocument::fromJson(reply->readAll()).object();
                 emit taskDetailsLoadSuccess(jsonObj);
             } else {
-                emit error("Failed to load task details: " + reply->errorString());
+                emit error(
+                    "Failed to load task details: " + reply->errorString()
+                );
             }
             reply->deleteLater();
         },
@@ -141,7 +146,9 @@ void NetworkManager::sendSolution(int taskId, const QString &code) {
 
                 emit solutionResult(jsonObj);
             } else {
-                emit solutionError("Failed to send solution: " + reply->errorString());
+                emit solutionError(
+                    "Failed to send solution: " + reply->errorString()
+                );
             }
             reply->deleteLater();
         },
@@ -154,16 +161,45 @@ void NetworkManager::loadStudentStatistics() {
     QString url = "/students/" + QString::number(currentUserId) + "/statistics";
 
     // TODO: уточнить нужно ли что-то передавать в json
-    sendRequest(url, {}, [this](QNetworkReply *reply){
-        if (reply->error() == QNetworkReply::NoError) {
-            QJsonObject jsonObj =
-                QJsonDocument::fromJson(reply->readAll()).object();
-            emit studentStatisticsLoaded(jsonObj);
-        } else {
-            emit error("Failed to load statistics: " + reply->errorString());
-        }
-        reply->deleteLater();
-    }, "GET");
+    sendRequest(
+        url, {},
+        [this](QNetworkReply *reply) {
+            if (reply->error() == QNetworkReply::NoError) {
+                QJsonObject jsonObj =
+                    QJsonDocument::fromJson(reply->readAll()).object();
+                emit studentStatisticsLoaded(jsonObj);
+            } else {
+                emit error(
+                    "Failed to load statistics: " + reply->errorString()
+                );
+            }
+            reply->deleteLater();
+        },
+        "GET"
+    );
+}
+
+void NetworkManager::loadTeacherStatistics() {
+    // TODO: уточнить эндпойнт
+    QString url = "/teachers/" + QString::number(currentUserId) + "/statistics";
+
+    // TODO: уточнить нужно ли что-то передавать в json
+    sendRequest(
+        url, {},
+        [this](QNetworkReply *reply) {
+            if (reply->error() == QNetworkReply::NoError) {
+                QJsonObject jsonObj =
+                    QJsonDocument::fromJson(reply->readAll()).object();
+                emit teacherStatisticsLoaded(jsonObj);
+            } else {
+                emit error(
+                    "Failed to load statistics: " + reply->errorString()
+                );
+            }
+            reply->deleteLater();
+        },
+        "GET"
+    );
 }
 
 void NetworkManager::createTask(const QJsonObject &task) {
@@ -299,4 +335,11 @@ QString NetworkManager::getUserName() {
 
 int NetworkManager::getUserId() {
     return currentUserId;
+}
+
+void NetworkManager::logout()
+{
+    currentUserId = -1;
+    currentUserName.clear();
+    currentUserRole.clear();
 }

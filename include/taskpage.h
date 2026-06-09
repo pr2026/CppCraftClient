@@ -48,7 +48,7 @@ private slots:
     void solutionResult(const QJsonObject &result);
     void solutionError(const QString &message);
     void switchMode();
-    void statisticsLoaded(const QJsonObject& statistics);
+    void statisticsLoaded(const QJsonObject &statistics);
 };
 
 #endif  // TASKPAGE_H

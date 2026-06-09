@@ -37,11 +37,24 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QPushButton" name="statisticsButton">
+         <property name="font">
+          <font>
+           <family>Century Gothic</family>
+           <pointsize>10</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>See Statistics</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QStackedWidget" name="rightWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="viewTaskPage">
        <layout class="QVBoxLayout" name="verticalLayout_18">
@@ -240,6 +253,59 @@
            </layout>
           </item>
          </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="statisticsPage">
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QLabel" name="generalStatisticsLabel">
+          <property name="font">
+           <font>
+            <family>Century Gothic</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>General Statistics
+</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="generalStatistics">
+          <property name="font">
+           <font>
+            <family>Century Gothic</family>
+           </font>
+          </property>
+          <property name="text">
+           <string>TextLabel</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="detailsLabel">
+          <property name="font">
+           <font>
+            <family>Century Gothic</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Details
+</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTableWidget" name="detailsTable">
+          <property name="font">
+           <font>
+            <family>Century Gothic</family>
+           </font>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>

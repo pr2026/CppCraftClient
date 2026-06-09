@@ -14,6 +14,7 @@ class LoginPage : public QWidget {
 public:
     explicit LoginPage(QWidget *parent = nullptr);
     ~LoginPage();
+    void clearFields();
 
 private:
     Ui::LoginPage *ui;

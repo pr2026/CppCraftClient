@@ -156,8 +156,6 @@ void LoginPage::clearClicked() {
 }
 
 void LoginPage::okClicked() {
-    // emit NetworkManager::instance()->loginSuccess();  // for debugging!!
-
     QString login = ui->loginInputLogin->text();
     QString password = ui->passwordInputLogin->text();
 
@@ -168,9 +166,6 @@ void LoginPage::okClicked() {
 }
 
 void LoginPage::registrationClicked() {
-    // emit NetworkManager::instance()->registrationSuccess();  // for
-    // debugging!!
-
     QString login = ui->loginInputRegistration->text();
     QString password = ui->passwordInputRegistration->text();
     QString role;
@@ -187,8 +182,7 @@ void LoginPage::registrationClicked() {
     NetworkManager::instance()->registration(login, password, role);
 }
 
-void LoginPage::clearFields()
-{
+void LoginPage::clearFields() {
     ui->loginInputLogin->clear();
     ui->passwordInputLogin->clear();
     ui->loginInputRegistration->clear();

@@ -28,7 +28,7 @@ private:
     LoginPage *loginPage;
     TaskPage *taskPage;
     TeacherPage *teacherPage;
-    QAction* logoutAction;
+    QAction *logoutAction;
 
 private slots:
     void

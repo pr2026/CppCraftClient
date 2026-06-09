@@ -32,12 +32,8 @@ private:
     void showStatisticsMode();
 
     void fillEditForm(const QJsonObject &details);
-    // void clearTaskForm();
     QJsonArray parseTests(const QString &testsText);
     void showTests(const QJsonArray &tests);
-
-    // TODO: УДАЛИТЬ
-    QJsonObject createMockStatistics();
 
 private slots:
     void tasksLoaded(const QJsonObject &tasks);

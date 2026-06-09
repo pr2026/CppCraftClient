@@ -20,12 +20,12 @@ MainWindow::MainWindow(QWidget *parent)
     ui->stackedWidget->addWidget(teacherPage);
 
     // для отладки taskPage!! потом поменять на loginPage!!
-    // ui->stackedWidget->setCurrentWidget(taskPage);
+    ui->stackedWidget->setCurrentWidget(taskPage);
 
     // для отладки teacherPage
     // ui->stackedWidget->setCurrentWidget(teacherPage);
 
-    ui->stackedWidget->setCurrentWidget(loginPage);
+    // ui->stackedWidget->setCurrentWidget(loginPage);
 
     connect(
         NetworkManager::instance(), &NetworkManager::loginSuccess, this,
@@ -49,8 +49,8 @@ MainWindow::~MainWindow() {
     delete ui;
 }
 
-void MainWindow::onLoginSuccess(const QString &userName, const QString &role) {
-    NetworkManager::instance()->setCurrentUser(userName, role);
+void MainWindow::onLoginSuccess(const QString &userName, const QString &role, int userId) {
+    NetworkManager::instance()->setCurrentUser(userName, role, userId);
 
     if (role == "student") {
         ui->stackedWidget->setCurrentWidget(taskPage);
@@ -63,9 +63,10 @@ void MainWindow::onLoginSuccess(const QString &userName, const QString &role) {
 
 void MainWindow::onRegistrationSuccess(
     const QString &userName,
-    const QString &role
+    const QString &role,
+    int userId
 ) {
-    NetworkManager::instance()->setCurrentUser(userName, role);
+    NetworkManager::instance()->setCurrentUser(userName, role, userId);
 
     if (role == "student") {
         ui->stackedWidget->setCurrentWidget(taskPage);

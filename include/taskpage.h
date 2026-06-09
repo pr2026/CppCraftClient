@@ -31,6 +31,13 @@ private:
     QVector<Task> tasksList;
     int currentTaskId = -1;
     QsciScintilla *codeEditor;
+    bool isCodingMode = true;
+
+    void showCodingMode();
+    void showStatisticsMode();
+
+    // TODO: УДАЛИТЬ
+    QJsonObject createMockStatistics();
 
 private slots:
     void tasksLoaded(const QJsonObject &tasks);
@@ -40,6 +47,8 @@ private slots:
     void submitClicked();
     void solutionResult(const QJsonObject &result);
     void solutionError(const QString &message);
+    void switchMode();
+    void statisticsLoaded(const QJsonObject& statistics);
 };
 
 #endif  // TASKPAGE_H

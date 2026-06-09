@@ -30,8 +30,8 @@ private:
     TeacherPage *teacherPage;
 
 private slots:
-    void onLoginSuccess(const QString &userName, const QString &role);
-    void onRegistrationSuccess(const QString &userName, const QString &role);
+    void onLoginSuccess(const QString &userName, const QString &role, int userId);
+    void onRegistrationSuccess(const QString &userName, const QString &role, int userId);
 };
 
 #endif  // MAINWINDOW_H

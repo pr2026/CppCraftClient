@@ -41,17 +41,44 @@ TeacherPage::TeacherPage(QWidget *parent)
     ui->nameInput->setFont(font);
 
     ui->taskList->setStyleSheet(
+        "QListWidget::item {"
+        "   background-color: #f4eee8"
+        "}"
         "QListWidget::item:selected {"
-        "    background-color: #A2D2FF;"
+        "    background-color: #dbcbba;"
         "    color: black;"
         "}"
         "QListWidget::item:hover:!selected {"
-        "    background-color: #D1E8FC;"
+        "    background-color: rgb(254,224,224);"
+        // "    background-color: #e3d6ca;"m
         "}"
         "QListWidget:focus {"
         "    outline: none;"
         "}"
-    );
+        );
+
+    loadTasks();
+
+    ui->taskCondition->setStyleSheet("background-color: #f4eee8;");
+    ui->tests->setStyleSheet("background-color: #f4eee8;");
+    ui->testsEdit->setStyleSheet("background-color: #f4eee8;");
+    ui->conditionEdit->setStyleSheet("background-color: #f4eee8;");
+
+    ui->nameInput->setStyleSheet(
+        "QLineEdit {"
+        "    min-height: 25px;"
+        "    max-height: 25px;"
+        "    background-color: #f4eee8;"
+        "}"
+        );
+
+    ui->difficultyBox->setStyleSheet(
+            "QComboBox {"
+            "    min-height: 25px;"
+            "    max-height: 25px;"
+            "    background-color: #f4eee8;"
+            "}"
+            );
 
     showViewMode();
 
@@ -137,21 +164,20 @@ void TeacherPage::showCreateMode() {
     isCreateMode = true;
     ui->rightWidget->setCurrentWidget(ui->createTaskPage);
     ui->addButton->setVisible(false);
+    ui->taskList->setSelectionMode(QAbstractItemView::NoSelection);
 }
 
 void TeacherPage::loadTasks() {
-    // ui->taskList->clear();
+    ui->taskList->clear();
 
-    // QVector<Task> tasksList = {
-    //              {1, "Hello World", "Напишите программу, которая выведет
-    //              'Hello World'"}, {2, "Сумма чисел", "На вход поступают 2
-    //              числа, найти их сумму"}, {3, "Перевернуть вектор",
-    //              "Переверните вектор"}};
+    QVector<Task> tasksList = {
+                 {1, "Hello World", "Напишите программу, которая выведет 'Hello World'"}, {2, "Сумма чисел", "На вход поступают 2 числа, найти их сумму"}, {3, "Перевернуть вектор",
+                 "Переверните вектор"}};
 
-    // for (const Task &task : tasksList) {
-    //     QString text = "№" + QString::number(task.id) + ". " + task.title;
-    //     ui->taskList->addItem(text);
-    // }
+    for (const Task &task : tasksList) {
+        QString text = "№" + QString::number(task.id) + ". " + task.title;
+        ui->taskList->addItem(text);
+    }
 
     NetworkManager::instance()->loadTasks();
 }
@@ -215,6 +241,7 @@ void TeacherPage::showTests(const QJsonArray &tests) {
 }
 
 void TeacherPage::addTaskClicked() {
+    ui->taskList->clearSelection();
     ui->nameInput->clear();
     ui->conditionEdit->clear();
     ui->testsEdit->clear();
@@ -239,6 +266,7 @@ void TeacherPage::deleteTaskClicked() {
 }
 
 void TeacherPage::editTaskClicked() {
+    ui->taskList->clearSelection();
     if (currentTaskId < 0) {
         QMessageBox::warning(this, "Error", "Choose the task to edit");
     }
@@ -337,3 +365,4 @@ void TeacherPage::taskEdited() {
     showViewMode();
     NetworkManager::instance()->loadTaskDetails(currentTaskId);
 }
+

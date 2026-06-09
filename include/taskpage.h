@@ -36,9 +36,6 @@ private:
     void showCodingMode();
     void showStatisticsMode();
 
-    // TODO: УДАЛИТЬ
-    QJsonObject createMockStatistics();
-
 private slots:
     void tasksLoaded(const QJsonObject &tasks);
     void taskSelected(QListWidgetItem *taskItem);

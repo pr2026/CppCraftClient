@@ -20,13 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->stackedWidget->addWidget(taskPage);
     ui->stackedWidget->addWidget(teacherPage);
 
-    // для отладки taskPage!! потом поменять на loginPage!!
-    ui->stackedWidget->setCurrentWidget(taskPage);
-
-    // для отладки teacherPage
-    // ui->stackedWidget->setCurrentWidget(teacherPage);
-
-    // ui->stackedWidget->setCurrentWidget(loginPage);
+    ui->stackedWidget->setCurrentWidget(loginPage);
 
     QToolBar *toolBar = new QToolBar(this);
     addToolBar(toolBar);
@@ -60,7 +54,9 @@ MainWindow::MainWindow(QWidget *parent)
             QMessageBox::warning(this, "Ошибка", message);
         }
     );
-    connect(logoutAction, &     QAction::triggered, this, &MainWindow::onLogoutClicked);
+    connect(
+        logoutAction, &QAction::triggered, this, &MainWindow::onLogoutClicked
+    );
 }
 
 MainWindow::~MainWindow() {
@@ -101,12 +97,12 @@ void MainWindow::onRegistrationSuccess(
     }
 }
 
-void MainWindow::onLogoutClicked()
-{
+void MainWindow::onLogoutClicked() {
     QMessageBox::StandardButton reply;
-    reply = QMessageBox::question(this, "Logout",
-                                  "Are you sure you want to leave?",
-                                  QMessageBox::Yes | QMessageBox::No);
+    reply = QMessageBox::question(
+        this, "Logout", "Are you sure you want to leave?",
+        QMessageBox::Yes | QMessageBox::No
+    );
 
     if (reply == QMessageBox::Yes) {
         NetworkManager::instance()->logout();

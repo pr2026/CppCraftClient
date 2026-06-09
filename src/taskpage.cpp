@@ -62,14 +62,13 @@ TaskPage::TaskPage(QWidget *parent) : QWidget(parent), ui(new Ui::TaskPage) {
         "}"
         "QListWidget::item:hover:!selected {"
         "    background-color: rgb(254,224,224);"
-        // "    background-color: #e3d6ca;"
         "}"
         "QListWidget:focus {"
         "    outline: none;"
         "}"
     );
 
-    // loadTasks();
+    loadTasks();
 
     codeEditor = new QsciScintilla(this);
     QsciLexerCPP *lexer = new QsciLexerCPP(this);
@@ -120,13 +119,10 @@ TaskPage::TaskPage(QWidget *parent) : QWidget(parent), ui(new Ui::TaskPage) {
 
     // TODO: ПОМЕНЯТЬ
 
-    connect(NetworkManager::instance(),
-    &NetworkManager::studentStatisticsLoaded, this,
-    &TaskPage::statisticsLoaded);
-    // QTimer::singleShot(100, this, [this]() {
-    //     QJsonObject mockStats = createMockStatistics();
-    //     statisticsLoaded(mockStats);
-    // });
+    connect(
+        NetworkManager::instance(), &NetworkManager::studentStatisticsLoaded,
+        this, &TaskPage::statisticsLoaded
+    );
 }
 
 TaskPage::~TaskPage() {
@@ -174,17 +170,6 @@ void TaskPage::codeEditorSetter(QsciLexerCPP *lexer) {
 }
 
 void TaskPage::loadTasks() {
-    // sample tasks
-    // tasksList = {
-    //     {1, "Hello World", "Напишите программу, которая выведет'Hello World'"},
-    //     {2, "Сумма чисел", "На вход поступают 2 числа, найти их сумму"},
-    //     {3, "Перевернуть вектор", "Переверните вектор"}};
-
-    // for (const Task &task : tasksList) {
-    //     QString text = "№" + QString::number(task.id) + ". " + task.title;
-    //     ui->tasksList->addItem(text);
-    // }
-
     NetworkManager::instance()->loadTasks();
 }
 
@@ -350,42 +335,4 @@ void TaskPage::statisticsLoaded(const QJsonObject &statistics) {
     }
 
     ui->detailsTable->resizeColumnsToContents();
-}
-
-// TODO: УДАЛИТЬ
-QJsonObject TaskPage::createMockStatistics() {
-    QJsonObject stats;
-    stats["total_attempts"] = 15;
-    stats["solved_tasks"] = 8;
-    stats["success_rate"] = 53.3;
-
-    QJsonArray tasks;
-
-    QJsonObject task1;
-    task1["task_id"] = 1;
-    task1["task_title"] = "Hello World";
-    task1["is_solved"] = true;
-    task1["best_result"] = 1;
-    task1["attempts"] = 3;
-    tasks.append(task1);
-
-    QJsonObject task2;
-    task2["task_id"] = 2;
-    task2["task_title"] = "Сумма чисел";
-    task2["is_solved"] = false;
-    task2["best_result"] = 2;
-    task2["attempts"] = 5;
-    tasks.append(task2);
-
-    QJsonObject task3;
-    task3["task_id"] = 4;
-    task3["task_title"] = "Максимум из трёх";
-    task3["is_solved"] = false;
-    task3["best_result"] = 1;
-    task3["attempts"] = 7;
-    tasks.append(task3);
-
-    stats["tasks_details"] = tasks;
-
-    return stats;
 }

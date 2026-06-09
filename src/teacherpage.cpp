@@ -1,6 +1,6 @@
 #include "teacherpage.h"
-#include "ui_teacherpage.h"
 #include <QTimer>
+#include "ui_teacherpage.h"
 
 TeacherPage::TeacherPage(QWidget *parent)
     : QWidget(parent), ui(new Ui::TeacherPage) {
@@ -60,14 +60,11 @@ TeacherPage::TeacherPage(QWidget *parent)
         "}"
         "QListWidget::item:hover:!selected {"
         "    background-color: rgb(254,224,224);"
-        // "    background-color: #e3d6ca;"m
         "}"
         "QListWidget:focus {"
         "    outline: none;"
         "}"
     );
-
-    // loadTasks();
 
     ui->taskCondition->setStyleSheet("background-color: #f4eee8;");
     ui->tests->setStyleSheet("background-color: #f4eee8;");
@@ -115,7 +112,7 @@ TeacherPage::TeacherPage(QWidget *parent)
         "    font-weight: regular;"
         "    background-color: #f4eee8;"
         "}"
-        );
+    );
 
     connect(
         NetworkManager::instance(), &NetworkManager::tasksLoadSuccess, this,
@@ -175,14 +172,10 @@ TeacherPage::TeacherPage(QWidget *parent)
         NetworkManager::instance(), &NetworkManager::taskEdited, this,
         &TeacherPage::taskEdited, Qt::UniqueConnection
     );
-
-    // TODO: ПОМЕНЯТЬ
-
-    connect(NetworkManager::instance(), &NetworkManager::teacherStatisticsLoaded, this, &TeacherPage::statisticsLoaded);
-    // QTimer::singleShot(100, this, [this]() {
-    //     QJsonObject mockStats = createMockStatistics();
-    //     statisticsLoaded(mockStats);
-    // });
+    connect(
+        NetworkManager::instance(), &NetworkManager::teacherStatisticsLoaded,
+        this, &TeacherPage::statisticsLoaded
+    );
 }
 
 TeacherPage::~TeacherPage() {
@@ -216,17 +209,6 @@ void TeacherPage::showStatisticsMode() {
 
 void TeacherPage::loadTasks() {
     ui->taskList->clear();
-
-    /*QVector<Task> tasksList = {
-        {1, "Hello World", "Напишите программу, которая выведет 'Hello World'"},
-        {2, "Сумма чисел", "На вход поступают 2 числа, найти их сумму"},
-        {3, "Перевернуть вектор", "Переверните вектор"}};*/
-
-    // for (const Task &task : tasksList) {
-    //     QString text = "№" + QString::number(task.id) + ". " + task.title;
-    //     ui->taskList->addItem(text);
-    // }
-
     NetworkManager::instance()->loadTasks();
 }
 
@@ -400,20 +382,6 @@ QJsonArray TeacherPage::parseTests(const QString &testsText) {
 }
 
 void TeacherPage::statisticsLoaded(const QJsonObject &statistics) {
-    // TODO: уточнить названия json
-
-    // int totalAttemps = statistics["total_attempts"].toInt();
-    // int successfulAttempts = statistics["solved_tasks"].toInt();
-    // double successRate = statistics["success_rate"].toDouble();
-
-    // QString generalText = QString("Total attempts: %1\n"
-    //                           "Solved Tasks: %2\n"
-    //                           "Success percentage: %3\%\n"
-    //                           ).arg(totalAttemps).arg(successfulAttempts).arg(successRate,
-    //                           0, 'f', 1);
-
-    // ui->generalStatistics->setText(generalText);
-
     QJsonArray tasks = statistics["tasks_details"].toArray();
 
     ui->detailsTable->setRowCount(tasks.size());
@@ -479,41 +447,4 @@ void TeacherPage::taskEdited() {
     loadTasks();
     showViewMode();
     NetworkManager::instance()->loadTaskDetails(currentTaskId);
-}
-
-QJsonObject TeacherPage::createMockStatistics() {
-    QJsonObject stats;
-    // stats["total_attempts"] = 15;
-    // stats["solved_tasks"] = 8;
-    // stats["success_rate"] = 53.3;
-
-    QJsonArray tasks;
-
-    QJsonObject task1;
-    task1["task_id"] = 1;
-    task1["task_title"] = "Hello World";
-    task1["total_attempts"] = 10;
-    task1["successful_attempts"] = 1;
-    task1["success_rate"] = 10;
-    tasks.append(task1);
-
-    QJsonObject task2;
-    task2["task_id"] = 2;
-    task2["task_title"] = "Сумма чисел";
-    task2["total_attempts"] = 5;
-    task2["successful_attempts"] = 5;
-    task2["success_rate"] = 100;
-    tasks.append(task2);
-
-    QJsonObject task3;
-    task3["task_id"] = 4;
-    task3["task_title"] = "Максимум из трёх";
-    task3["total_attempts"] = 8;
-    task3["successful_attempts"] = 4;
-    task3["success_rate"] = 50;
-    tasks.append(task3);
-
-    stats["tasks_details"] = tasks;
-
-    return stats;
 }
